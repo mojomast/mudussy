@@ -463,7 +463,8 @@ export class TelnetServer extends EventEmitter {
   private sendPrompt(sessionId: string): void {
     const session = this.sessionManager.getSession(sessionId);
     if (session?.state === SessionState.CONNECTED) {
-      this.sessionManager.sendToSession(sessionId, ColorScheme.prompt());
+  const promptText = this.commandParser.getPromptFor(sessionId);
+  this.sessionManager.sendToSession(sessionId, ColorScheme.prompt(promptText));
     }
   }
 

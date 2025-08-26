@@ -43,5 +43,12 @@ export declare class DialogueCommandHandlers {
             usage: string;
             handler: any;
         };
+        leave: {
+            command: string;
+            aliases: string[];
+            description: string;
+            usage: string;
+            handler: any;
+        };
     };
 }

@@ -108,6 +108,27 @@ export class WebClientService {
       }
     });
 
+    // Dialogue indicators for web clients
+    this.eventSystem.on('dialogue.conversation.started', (event) => {
+      const playerId = String(event.target || '');
+      const player = playerId ? this.playerManager.getPlayerById(playerId) : undefined;
+      if (!player) return;
+      const webClientId = this.getWebClientIdBySessionId(player.sessionId);
+      if (webClientId) {
+        this.emitToWeb(webClientId, { type: 'system', content: '[Dialogue mode enabled]' });
+      }
+    });
+
+    this.eventSystem.on('dialogue.conversation.ended', (event) => {
+      const playerId = String(event.target || '');
+      const player = playerId ? this.playerManager.getPlayerById(playerId) : undefined;
+      if (!player) return;
+      const webClientId = this.getWebClientIdBySessionId(player.sessionId);
+      if (webClientId) {
+        this.emitToWeb(webClientId, { type: 'system', content: '[Dialogue mode disabled]' });
+      }
+    });
+
     // Notify room occupants when a player enters
     this.eventSystem.on('world.room.entered', (event) => {
       if (!event.data) return;
@@ -243,6 +264,24 @@ export class WebClientService {
     const engineSessionId = this.webSessions.get(webClientId);
     if (!engineSessionId) {
       throw new Error('Web session not found');
+    }
+    // If in dialogue mode, intercept input similarly to telnet side
+    if (this.commandParser.isInDialogueMode(engineSessionId)) {
+      const trimmed = command.trim();
+      if (!trimmed) return '';
+      const lower = trimmed.toLowerCase();
+      if (lower === 'exit' || lower === 'end' || lower === 'leave' || lower === 'cancel') {
+        const leave = this.commandParser.getCommandHandler('leave');
+        if (leave) {
+          const res = await leave.handler(engineSessionId, [], trimmed);
+          return typeof res === 'string' ? this.stripAnsi(res) : '';
+        }
+      }
+      const respond = this.commandParser.getCommandHandler('respond');
+      if (respond) {
+        const res = await respond.handler(engineSessionId, [trimmed], trimmed);
+        return typeof res === 'string' ? this.stripAnsi(res) : '';
+      }
     }
     // Manually parse and dispatch to handler to avoid re-emitting COMMAND_RECEIVED
     const trimmed = command.trim();

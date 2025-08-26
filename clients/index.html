@@ -135,6 +135,21 @@
             display: block;
         }
 
+        .dialogue-indicator {
+            position: fixed;
+            bottom: 10px;
+            right: 20px;
+            padding: 6px 10px;
+            background-color: #001100;
+            border: 1px solid #0f0;
+            color: #0ff;
+            font-size: 12px;
+            display: none;
+        }
+        .dialogue-indicator.show {
+            display: inline-block;
+        }
+
         .auth-input {
             background-color: #000;
             border: 1px solid #0f0;
@@ -177,6 +192,8 @@
             <button id="sendButton" class="send-button" disabled>Send</button>
         </div>
     </div>
+
+    <div class="dialogue-indicator" id="dialogueIndicator">Dialogue mode</div>
 
     <!-- Socket.IO client from server -->
     <script src="/socket.io/socket.io.js"></script>

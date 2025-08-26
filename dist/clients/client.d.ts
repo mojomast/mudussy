@@ -12,8 +12,10 @@ declare class MUDWebClient {
     outputElement: HTMLElement;
     commandInput: HTMLElement;
     sendButton: HTMLElement;
+    dialogueIndicator: HTMLElement;
     initEventListeners(): void;
     connect(): void;
+    setDialogueIndicator(on: any): void;
     authenticate(): void;
     sendCommand(): void;
     addMessage(content: any, type?: string): void;

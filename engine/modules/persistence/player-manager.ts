@@ -72,6 +72,16 @@ export class PlayerManager extends EventEmitter {
   }
 
   /**
+   * Get player by persistent player ID
+   */
+  getPlayerById(playerId: string): Player | undefined {
+    for (const player of this.activePlayers.values()) {
+      if (player.id === playerId) return player;
+    }
+    return undefined;
+  }
+
+  /**
    * Remove player by session ID
    */
   removePlayerBySessionId(sessionId: string): boolean {

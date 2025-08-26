@@ -38,6 +38,13 @@ class PlayerManager extends events_1.EventEmitter {
         }
         return undefined;
     }
+    getPlayerById(playerId) {
+        for (const player of this.activePlayers.values()) {
+            if (player.id === playerId)
+                return player;
+        }
+        return undefined;
+    }
     removePlayerBySessionId(sessionId) {
         const player = this.activePlayers.get(sessionId);
         if (player) {

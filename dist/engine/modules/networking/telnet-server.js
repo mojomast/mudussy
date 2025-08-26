@@ -296,7 +296,8 @@ class TelnetServer extends events_1.EventEmitter {
     sendPrompt(sessionId) {
         const session = this.sessionManager.getSession(sessionId);
         if (session?.state === types_1.SessionState.CONNECTED) {
-            this.sessionManager.sendToSession(sessionId, ansi_1.ColorScheme.prompt());
+            const promptText = this.commandParser.getPromptFor(sessionId);
+            this.sessionManager.sendToSession(sessionId, ansi_1.ColorScheme.prompt(promptText));
         }
     }
     sendMessage(sessionId, message) {
