@@ -1,0 +1,221 @@
+{
+  "id": "merchant",
+  "name": "Merchant Dialogue",
+  "description": "A traveling merchant with goods to sell",
+  "version": "1.0.0",
+  "startNodeId": "merchant_greeting",
+  "variables": {
+    "first_time": true,
+    "bargained": false,
+    "sold_item": false
+  },
+  "nodes": {
+    "merchant_greeting": {
+      "id": "merchant_greeting",
+      "npcMessage": "Greetings, traveler! I am Zara, purveyor of fine goods from distant lands. What brings you to my humble cart?",
+      "choices": [
+        {
+          "id": "1",
+          "text": "Show me your wares.",
+          "nextNodeId": "show_goods"
+        },
+        {
+          "id": "2",
+          "text": "I'm just browsing.",
+          "nextNodeId": "casual_chat"
+        },
+        {
+          "id": "3",
+          "text": "Do you have any information about the local area?",
+          "nextNodeId": "local_info"
+        }
+      ],
+      "actions": [
+        {
+          "type": "set_variable",
+          "target": "first_time",
+          "value": false
+        }
+      ]
+    },
+    "show_goods": {
+      "id": "show_goods",
+      "npcMessage": "Ah, a customer with good taste! I have several items that might interest you:\n\n1. Healing Potion - 50 gold\n2. Iron Sword - 200 gold\n3. Magic Ring - 500 gold\n4. Map of the region - 25 gold",
+      "choices": [
+        {
+          "id": "1",
+          "text": "I'll take the healing potion.",
+          "nextNodeId": "purchase_potion",
+          "condition": {
+            "type": "stat",
+            "operator": "greater_than",
+            "target": "currency",
+            "value": 50
+          }
+        },
+        {
+          "id": "2",
+          "text": "The sword looks good, but can you lower the price?",
+          "nextNodeId": "bargain_sword",
+          "condition": {
+            "type": "stat",
+            "operator": "greater_than",
+            "target": "level",
+            "value": 3
+          }
+        },
+        {
+          "id": "3",
+          "text": "Nothing for me today.",
+          "nextNodeId": "no_purchase"
+        }
+      ]
+    },
+    "purchase_potion": {
+      "id": "purchase_potion",
+      "npcMessage": "Excellent choice! The healing potion will serve you well on your adventures. That's 50 gold, please.",
+      "choices": [
+        {
+          "id": "1",
+          "text": "Here you go.",
+          "nextNodeId": "thank_you",
+          "actions": [
+            {
+              "type": "give_item",
+              "target": "healing_potion"
+            },
+            {
+              "type": "set_variable",
+              "target": "sold_item",
+              "value": true
+            }
+          ]
+        }
+      ]
+    },
+    "bargain_sword": {
+      "id": "bargain_sword",
+      "npcMessage": "For you, my friend? 180 gold and it's yours. That's my final offer!",
+      "choices": [
+        {
+          "id": "1",
+          "text": "Deal!",
+          "nextNodeId": "thank_you",
+          "condition": {
+            "type": "stat",
+            "operator": "greater_than",
+            "target": "currency",
+            "value": 180
+          },
+          "actions": [
+            {
+              "type": "give_item",
+              "target": "iron_sword"
+            },
+            {
+              "type": "set_variable",
+              "target": "sold_item",
+              "value": true
+            }
+          ]
+        },
+        {
+          "id": "2",
+          "text": "Still too expensive.",
+          "nextNodeId": "no_purchase"
+        }
+      ],
+      "actions": [
+        {
+          "type": "set_variable",
+          "target": "bargained",
+          "value": true
+        }
+      ]
+    },
+    "casual_chat": {
+      "id": "casual_chat",
+      "npcMessage": "Feel free to look around! I travel from town to town, bringing the best goods money can buy. You never know what treasures you might find.",
+      "choices": [
+        {
+          "id": "1",
+          "text": "Tell me about your travels.",
+          "nextNodeId": "travel_stories"
+        },
+        {
+          "id": "2",
+          "text": "Actually, show me what you have for sale.",
+          "nextNodeId": "show_goods"
+        }
+      ]
+    },
+    "travel_stories": {
+      "id": "travel_stories",
+      "npcMessage": "Ah, the roads I've traveled! From the bustling markets of the capital to remote mountain villages, I've seen wonders and dangers alike. The world is full of adventure for those brave enough to seek it.",
+      "choices": [
+        {
+          "id": "1",
+          "text": "What dangers have you encountered?",
+          "nextNodeId": "danger_stories"
+        },
+        {
+          "id": "2",
+          "text": "Thanks for the chat!",
+          "nextNodeId": "farewell"
+        }
+      ]
+    },
+    "local_info": {
+      "id": "local_info",
+      "npcMessage": "The local village is peaceful enough, but I hear there are bandits in the hills and strange things happening in the ancient ruins. The villagers are nice folk, always willing to share a story or two.",
+      "choices": [
+        {
+          "id": "1",
+          "text": "Tell me more about the bandits.",
+          "nextNodeId": "bandit_info"
+        },
+        {
+          "id": "2",
+          "text": "What about the ruins?",
+          "nextNodeId": "ruins_info"
+        }
+      ]
+    },
+    "thank_you": {
+      "id": "thank_you",
+      "npcMessage": "Thank you for your business! May your adventures be profitable and your enemies few. Come back anytime!",
+      "isEnd": true
+    },
+    "no_purchase": {
+      "id": "no_purchase",
+      "npcMessage": "No worries at all! Perhaps next time. Safe travels, friend!",
+      "isEnd": true
+    },
+    "farewell": {
+      "id": "farewell",
+      "npcMessage": "Farewell, traveler! May fortune smile upon you.",
+      "isEnd": true
+    },
+    "danger_stories": {
+      "id": "danger_stories",
+      "npcMessage": "Bandits, wild beasts, treacherous terrain... the roads are full of peril. But that's what makes the destination so sweet! Stay sharp out there.",
+      "isEnd": true
+    },
+    "bandit_info": {
+      "id": "bandit_info",
+      "npcMessage": "The bandits have been troubling the trade routes. They're led by someone called 'Red Jack' - nasty fellow with a scar across his face. The village elder might have a reward for dealing with them.",
+      "isEnd": true
+    },
+    "ruins_info": {
+      "id": "ruins_info",
+      "npcMessage": "The ruins are said to be from an ancient civilization. Strange lights and sounds come from there at night. I've heard tales of lost treasures, but also of curses and guardians.",
+      "isEnd": true
+    }
+  },
+  "metadata": {
+    "author": "Dialogue System Example",
+    "created": "2025-01-15T00:00:00Z",
+    "updated": "2025-01-15T00:00:00Z",
+    "tags": ["merchant", "shopping", "information", "bargaining"]
+  }
+}

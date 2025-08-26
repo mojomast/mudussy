@@ -1,0 +1,129 @@
+id: guard
+name: Guard Dialogue
+description: A simple guard with basic interactions
+version: 1.0.0
+startNodeId: guard_greeting
+variables:
+  suspicious: false
+  friendly: false
+
+nodes:
+  guard_greeting:
+    id: guard_greeting
+    npcMessage: |
+      Halt! Who goes there? State your business in the village.
+
+      {{friendly ? "Ah, a friendly face!" : "You don't look familiar..."}}
+    choices:
+      - id: "1"
+        text: "I'm just passing through."
+        nextNodeId: passing_through
+      - id: "2"
+        text: "I'm here to help the village."
+        nextNodeId: here_to_help
+      - id: "3"
+        text: "What's the latest news?"
+        nextNodeId: village_news
+    variables:
+      greeted: true
+
+  passing_through:
+    id: passing_through
+    npcMessage: |
+      Passing through, eh? Well, mind your manners and don't cause any trouble.
+      We've had enough excitement lately with all these bandits about.
+    choices:
+      - id: "1"
+        text: "I understand. Have a good day."
+        nextNodeId: farewell
+      - id: "2"
+        text: "Bandits? Tell me more."
+        nextNodeId: bandit_warning
+    actions:
+      - type: set_variable
+        target: friendly
+        value: true
+
+  here_to_help:
+    id: here_to_help
+    npcMessage: |
+      Here to help, are you? Well, that's good to hear. The village elder
+      could always use another strong arm. Head to the big house in the
+      center of town if you're serious.
+    choices:
+      - id: "1"
+        text: "I'll do that. Thank you!"
+        nextNodeId: farewell
+        actions:
+          - type: add_flag
+            target: guard_approval
+    variables:
+      friendly: true
+
+  village_news:
+    id: village_news
+    npcMessage: |
+      News? Well, the bandits in the hills are the main concern. They've
+      been getting bolder lately. Also, strange lights from the old ruins
+      at night. The elder's been worried about it.
+    choices:
+      - id: "1"
+        text: "Thanks for the information."
+        nextNodeId: farewell
+      - id: "2"
+        text: "I can help with the bandits."
+        nextNodeId: offer_help
+        condition:
+          type: level
+          operator: greater_than
+          value: 5
+
+  bandit_warning:
+    id: bandit_warning
+    npcMessage: |
+      Those bandits are led by a fellow called Red Jack. They're holed up
+      in the caves to the north. Stay on the main roads and travel in groups
+      if you can. They don't take kindly to strangers.
+    choices:
+      - id: "1"
+        text: "I'll be careful."
+        nextNodeId: farewell
+      - id: "2"
+        text: "Maybe I can deal with them."
+        nextNodeId: offer_help
+        condition:
+          type: level
+          operator: greater_than
+          value: 7
+
+  offer_help:
+    id: offer_help
+    npcMessage: |
+      You think you can handle Red Jack and his crew? Well, if you're serious,
+      talk to the village elder. He might have a reward for you if you
+      can clear those bandits out.
+    choices:
+      - id: "1"
+        text: "I'll consider it."
+        nextNodeId: farewell
+        actions:
+          - type: add_flag
+            target: bandit_quest_hint
+    variables:
+      friendly: true
+
+  farewell:
+    id: farewell
+    npcMessage: |
+      {{friendly ? "Good luck to you, friend!" : "Move along now."}}
+    isEnd: true
+
+metadata:
+  author: Dialogue System Example
+  created: 2025-01-15T00:00:00Z
+  updated: 2025-01-15T00:00:00Z
+  tags:
+    - guard
+    - simple
+    - village
+    - information

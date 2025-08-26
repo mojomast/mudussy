@@ -1,0 +1,34 @@
+import { EventSystem } from '../../core/event';
+import { IPlayer } from '../persistence/types';
+import { IDialogueProvider, IDialogueResponse, IConversationState, IVariableContext, IDialogueCondition, IDialogueAction } from './types';
+export declare abstract class BaseDialogueProvider implements IDialogueProvider {
+    id: string;
+    name: string;
+    type: 'canned' | 'ai' | 'custom';
+    protected eventSystem: EventSystem;
+    protected config: any;
+    protected activeConversations: Map<string, IConversationState>;
+    protected logger: any;
+    constructor(id: string, name: string, type: 'canned' | 'ai' | 'custom', eventSystem: EventSystem, logger?: any);
+    initialize(config?: any): Promise<void>;
+    abstract canHandle(npcId: string): boolean;
+    abstract startConversation(player: IPlayer, npcId: string, context?: any): Promise<IDialogueResponse>;
+    abstract continueConversation(player: IPlayer, npcId: string, playerInput: string, conversationId: string): Promise<IDialogueResponse>;
+    endConversation(player: IPlayer, npcId: string, conversationId: string): Promise<void>;
+    getConversationState(conversationId: string): IConversationState | undefined;
+    protected createConversationState(player: IPlayer, npcId: string): IConversationState;
+    protected updateConversationState(conversationId: string, updates: Partial<IConversationState>): void;
+    protected createVariableContext(player: IPlayer, npcId: string, conversationState: IConversationState): IVariableContext;
+    protected evaluateCondition(condition: IDialogueCondition, context: IVariableContext): boolean;
+    private evaluateVariableCondition;
+    private evaluateFlagCondition;
+    private evaluateItemCondition;
+    private evaluateQuestCondition;
+    private evaluateStatCondition;
+    private evaluateSkillCondition;
+    private evaluateLevelCondition;
+    private evaluateTimeCondition;
+    private compareValues;
+    protected executeAction(action: IDialogueAction, context: IVariableContext): Promise<void>;
+    protected executeCustomAction(action: IDialogueAction, context: IVariableContext): Promise<void>;
+}

@@ -1,0 +1,231 @@
+id: village-elder
+name: Village Elder Dialogue
+description: A wise village elder who provides quests and information
+version: 1.0.0
+startNodeId: greeting
+variables:
+  greeted: false
+  quest_accepted: false
+  helped_village: false
+
+nodes:
+  greeting:
+    id: greeting
+    npcMessage: |
+      Ah, a visitor to our humble village! I am Eldric, the village elder.
+      What brings you to our quiet corner of the world?
+
+      {{greeted ? "Welcome back, friend!" : "I don't believe we've met before."}}
+    choices:
+      - id: "1"
+        text: "I'm just passing through."
+        nextNodeId: passing_through
+      - id: "2"
+        text: "I'm looking for adventure."
+        nextNodeId: seeking_adventure
+        condition:
+          type: level
+          operator: greater_than
+          value: 5
+      - id: "3"
+        text: "I need information about the village."
+        nextNodeId: village_info
+      - id: "4"
+        text: "Can you tell me about the nearby dungeon?"
+        nextNodeId: dungeon_rumor
+        condition:
+          type: quest
+          operator: has
+          target: village_defense
+    actions:
+      - type: set_variable
+        target: greeted
+        value: true
+    variables:
+      last_choice: greeting
+
+  passing_through:
+    id: passing_through
+    npcMessage: |
+      Passing through, eh? Well, safe travels to you! But if you have a moment,
+      our village could use some help. We've been having trouble with bandits
+      in the hills lately.
+    choices:
+      - id: "1"
+        text: "Tell me more about these bandits."
+        nextNodeId: bandit_problem
+      - id: "2"
+        text: "I might be able to help."
+        nextNodeId: offer_help
+        condition:
+          type: level
+          operator: greater_than
+          value: 3
+      - id: "3"
+        text: "I'm sorry, I must be going."
+        nextNodeId: farewell
+    variables:
+      last_choice: passing_through
+
+  seeking_adventure:
+    id: seeking_adventure
+    npcMessage: |
+      Adventure, you say? Well, you're in the right place! Our village has its
+      share of mysteries and dangers. The ancient ruins to the east have been
+      attracting all sorts of creatures lately.
+    choices:
+      - id: "1"
+        text: "Tell me about the ruins."
+        nextNodeId: ruins_info
+      - id: "2"
+        text: "What creatures have you seen?"
+        nextNodeId: creature_sightings
+      - id: "3"
+        text: "I'm ready for a challenge!"
+        nextNodeId: quest_offer
+        condition:
+          type: level
+          operator: greater_than
+          value: 8
+    variables:
+      last_choice: seeking_adventure
+
+  village_info:
+    id: village_info
+    npcMessage: |
+      Our village has stood here for generations, built around the crystal-clear
+      river that flows from the mountains. We're mostly farmers and craftsmen,
+      but we've seen our share of heroes pass through.
+
+      {{player.stats.level > 10 ? "You've got the look of a seasoned adventurer about you." : "You seem new to this life."}}
+    choices:
+      - id: "1"
+        text: "What can you tell me about the local area?"
+        nextNodeId: local_area
+      - id: "2"
+        text: "Are there any shops in town?"
+        nextNodeId: shops_info
+      - id: "3"
+        text: "Thank you for the information."
+        nextNodeId: farewell
+    variables:
+      last_choice: village_info
+
+  bandit_problem:
+    id: bandit_problem
+    npcMessage: |
+      The bandits have been a real nuisance! They've been raiding our supply
+      caravans and stealing from travelers. We believe they're holed up in
+      the caves to the north. We've lost several good people trying to deal
+      with them.
+    choices:
+      - id: "1"
+        text: "I can help clear out those caves."
+        nextNodeId: offer_help
+        condition:
+          type: level
+          operator: greater_than
+          value: 5
+      - id: "2"
+        text: "That sounds dangerous. Be careful."
+        nextNodeId: farewell
+    variables:
+      last_choice: bandit_problem
+
+  offer_help:
+    id: offer_help
+    npcMessage: |
+      You would help us? The village would be forever grateful! The bandit leader
+      wears a distinctive red cloak, and they seem to have some kind of magical
+      artifact that makes them stronger.
+
+      If you clear them out, I'll see that you're rewarded handsomely.
+    choices:
+      - id: "1"
+        text: "Consider it done!"
+        nextNodeId: quest_accepted
+        actions:
+          - type: set_variable
+            target: quest_accepted
+            value: true
+          - type: start_quest
+            target: bandit_cleanup
+      - id: "2"
+        text: "I'll think about it."
+        nextNodeId: farewell
+    variables:
+      last_choice: offer_help
+
+  quest_accepted:
+    id: quest_accepted
+    npcMessage: |
+      Excellent! The caves are to the north of the village. Look for a red-cloaked
+      figure leading a group of bandits. Bring me proof of the leader's defeat,
+      and your reward will be substantial.
+    choices:
+      - id: "1"
+        text: "I'll return when the deed is done."
+        nextNodeId: farewell
+    actions:
+      - type: set_variable
+        target: helped_village
+        value: true
+    isEnd: true
+    variables:
+      last_choice: quest_accepted
+
+  ruins_info:
+    id: ruins_info
+    npcMessage: |
+      The ruins are an ancient elven city that fell centuries ago. Lately,
+      strange lights have been seen there at night, and travelers report
+      hearing whispers on the wind. Some say the old magic is awakening.
+    choices:
+      - id: "1"
+        text: "That sounds intriguing!"
+        nextNodeId: ruins_quest
+      - id: "2"
+        text: "Maybe I should avoid that place."
+        nextNodeId: farewell
+    variables:
+      last_choice: ruins_info
+
+  creature_sightings:
+    id: creature_sightings
+    npcMessage: |
+      We've seen all manner of creatures lately - goblins, trolls, even what
+      looked like a young dragon! The magic in the area seems to be drawing
+      them here. It's most concerning.
+    choices:
+      - id: "1"
+        text: "A dragon? That's serious!"
+        nextNodeId: dragon_concern
+      - id: "2"
+        text: "I can investigate the magic disturbance."
+        nextNodeId: magic_quest
+        condition:
+          type: skill
+          operator: greater_than
+          target: magic
+          value: 15
+    variables:
+      last_choice: creature_sightings
+
+  farewell:
+    id: farewell
+    npcMessage: |
+      Safe travels, {{player.name}}! Remember, if you ever need help or have
+      news from your journeys, my door is always open.
+    isEnd: true
+    variables:
+      last_choice: farewell
+
+metadata:
+  author: Dialogue System Example
+  created: 2025-01-15T00:00:00Z
+  updated: 2025-01-15T00:00:00Z
+  tags:
+    - village
+    - elder
+    - quest
+    - fantasy

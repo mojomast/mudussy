@@ -1,0 +1,27 @@
+[
+  {
+    "id": "131172ab-d9b6-4e6f-9248-e8dceb8f7a12",
+    "username": "admin",
+    "password": "admin123",
+    "role": "admin",
+    "createdAt": "2025-08-26T18:52:23.011Z",
+    "isActive": true,
+    "lastLogin": "2025-08-26T19:44:05.880Z"
+  },
+  {
+    "id": "83ffe67c-ca84-4e62-914a-0fcd357f6d18",
+    "username": "mod",
+    "password": "mod123",
+    "role": "moderator",
+    "createdAt": "2025-08-26T18:52:23.012Z",
+    "isActive": true
+  },
+  {
+    "id": "57d95882-91fc-431d-a6a9-5381580dcc9c",
+    "username": "player",
+    "password": "player123",
+    "role": "player",
+    "createdAt": "2025-08-26T18:52:23.014Z",
+    "isActive": true
+  }
+]

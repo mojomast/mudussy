@@ -1,0 +1,13 @@
+{
+  "barkeep": "village-elder",
+  "merchant": "merchant",
+  "guard": "guard",
+  "gate_guard": "guard",
+  "blacksmith": "blacksmith",
+  "master_blacksmith": "blacksmith",
+  "druid": "village-elder",
+  "king": "king",
+  "jester": "jester",
+  "apothecary": "apothecary",
+  "castle_captain": "guard"
+}

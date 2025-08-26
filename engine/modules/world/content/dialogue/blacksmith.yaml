@@ -1,0 +1,444 @@
+id: blacksmith
+name: Blacksmith Dialogue
+description: A gruff blacksmith who offers crafting services and equipment
+version: 1.0.0
+startNodeId: blacksmith_greeting
+variables:
+  greeted: false
+  commissioned: false
+  repaired: false
+  friendly: false
+
+nodes:
+  blacksmith_greeting:
+    id: blacksmith_greeting
+    npcMessage: |
+      *CLANG CLANG* Eh? What do you want? Can't you see I'm working here?
+
+      {{greeted ? "Back again? What now?" : "State your business or get out of my forge!"}}
+    choices:
+      - id: "1"
+        text: "I need some weapons or armor repaired."
+        nextNodeId: repair_service
+      - id: "2"
+        text: "Can you craft something for me?"
+        nextNodeId: crafting_service
+        condition:
+          type: level
+          operator: greater_than
+          value: 3
+      - id: "3"
+        text: "Do you have anything for sale?"
+        nextNodeId: shop_inventory
+      - id: "4"
+        text: "Just browsing. Nice forge you have."
+        nextNodeId: casual_chat
+      - id: "5"
+        text: "Never mind, I'll be going."
+        nextNodeId: farewell
+    actions:
+      - type: set_variable
+        target: greeted
+        value: true
+    variables:
+      greeted: true
+
+  repair_service:
+    id: repair_service
+    npcMessage: |
+      Repair work? Aye, I can fix most anything, but it'll cost ya. Show me what needs fixing.
+
+      What kind of item needs repair?
+    choices:
+      - id: "1"
+        text: "I need to repair my sword."
+        nextNodeId: weapon_repair
+        condition:
+          type: item
+          operator: has
+          target: sword
+      - id: "2"
+        text: "My armor is damaged."
+        nextNodeId: armor_repair
+        condition:
+          type: item
+          operator: has
+          target: armor
+      - id: "3"
+        text: "Never mind, maybe later."
+        nextNodeId: blacksmith_greeting
+    variables:
+      last_choice: repair_service
+
+  weapon_repair:
+    id: weapon_repair
+    npcMessage: |
+      Let's see that sword... Hmm, it's seen better days. I can fix this up for 50 gold pieces.
+      It'll be sharp enough to shave with when I'm done.
+
+      What do you say?
+    choices:
+      - id: "1"
+        text: "Deal! Here's the gold."
+        nextNodeId: repair_complete
+        actions:
+          - type: set_variable
+            target: repaired
+            value: true
+          - type: add_flag
+            target: weapon_repaired
+      - id: "2"
+        text: "That's too expensive."
+        nextNodeId: haggle_repair
+      - id: "3"
+        text: "Maybe later."
+        nextNodeId: blacksmith_greeting
+    variables:
+      last_choice: weapon_repair
+
+  armor_repair:
+    id: armor_repair
+    npcMessage: |
+      Armor repair, eh? Let me take a look... This dent won't fix itself. 75 gold pieces should
+      cover the work and materials. Your armor will be as good as new.
+
+      Sound fair?
+    choices:
+      - id: "1"
+        text: "That's fair. Let's do it."
+        nextNodeId: repair_complete
+        actions:
+          - type: set_variable
+            target: repaired
+            value: true
+          - type: add_flag
+            target: armor_repaired
+      - id: "2"
+        text: "Can you do it for less?"
+        nextNodeId: haggle_repair
+      - id: "3"
+        text: "I'll think about it."
+        nextNodeId: blacksmith_greeting
+    variables:
+      last_choice: armor_repair
+
+  haggle_repair:
+    id: haggle_repair
+    npcMessage: |
+      Haggle? You think I got where I am by giving things away? Fine, 40 gold for the weapon,
+      60 for the armor. That's my final offer.
+
+      Take it or leave it.
+    choices:
+      - id: "1"
+        text: "Fine, deal."
+        nextNodeId: repair_complete
+        actions:
+          - type: set_variable
+            target: repaired
+            value: true
+          - type: add_flag
+            target: haggled_successfully
+      - id: "2"
+        text: "Still too much."
+        nextNodeId: blacksmith_greeting
+    variables:
+      last_choice: haggle_repair
+
+  repair_complete:
+    id: repair_complete
+    npcMessage: |
+      Good choice. Give me a few minutes... *CLANG CLANG CLANG* There, good as new!
+
+      {{repaired ? "Pleasure doing business with you." : "Come back anytime you need work done."}}
+    choices:
+      - id: "1"
+        text: "Thank you! Can I ask you something?"
+        nextNodeId: blacksmith_greeting
+      - id: "2"
+        text: "Thanks, I'll be going now."
+        nextNodeId: farewell
+    variables:
+      friendly: true
+
+  crafting_service:
+    id: crafting_service
+    npcMessage: |
+      Custom work? Now that's interesting. I don't do just anything, but if you bring me
+      the right materials, I can craft something special.
+
+      What are you looking for?
+    choices:
+      - id: "1"
+        text: "I need a better weapon."
+        nextNodeId: weapon_commission
+        condition:
+          type: level
+          operator: greater_than
+          value: 5
+      - id: "2"
+        text: "Stronger armor would help."
+        nextNodeId: armor_commission
+        condition:
+          type: level
+          operator: greater_than
+          value: 7
+      - id: "3"
+        text: "Actually, never mind."
+        nextNodeId: blacksmith_greeting
+    variables:
+      last_choice: crafting_service
+
+  weapon_commission:
+    id: weapon_commission
+    npcMessage: |
+      A custom weapon, eh? I can forge you a fine steel sword if you bring me:
+      - 3 iron ingots
+      - 1 leather strip
+      - 100 gold pieces
+
+      It'll be +2 to attack and quite sturdy. Interested?
+    choices:
+      - id: "1"
+        text: "Yes! I'll get those materials."
+        nextNodeId: commission_accepted
+        actions:
+          - type: set_variable
+            target: commissioned
+            value: true
+          - type: start_quest
+            target: blacksmith_weapon_commission
+      - id: "2"
+        text: "That's too expensive."
+        nextNodeId: blacksmith_greeting
+      - id: "3"
+        text: "Maybe something else."
+        nextNodeId: crafting_service
+    variables:
+      last_choice: weapon_commission
+
+  armor_commission:
+    id: armor_commission
+    npcMessage: |
+      Custom armor? I can make you a reinforced breastplate with these materials:
+      - 5 iron ingots
+      - 2 leather strips
+      - 150 gold pieces
+
+      It'll give you +3 defense. What do you say?
+    choices:
+      - id: "1"
+        text: "Perfect! I'll gather the materials."
+        nextNodeId: commission_accepted
+        actions:
+          - type: set_variable
+            target: commissioned
+            value: true
+          - type: start_quest
+            target: blacksmith_armor_commission
+      - id: "2"
+        text: "Too rich for my blood."
+        nextNodeId: blacksmith_greeting
+      - id: "3"
+        text: "Let me think about it."
+        nextNodeId: crafting_service
+    variables:
+      last_choice: armor_commission
+
+  commission_accepted:
+    id: commission_accepted
+    npcMessage: |
+      Excellent! Bring me the materials when you've got them, and I'll get to work.
+      Quality takes time, but it's worth it.
+
+      Come back when you're ready.
+    choices:
+      - id: "1"
+        text: "I'll return with the materials!"
+        nextNodeId: farewell
+      - id: "2"
+        text: "Actually, I changed my mind."
+        nextNodeId: blacksmith_greeting
+        actions:
+          - type: set_variable
+            target: commissioned
+            value: false
+    variables:
+      friendly: true
+
+  shop_inventory:
+    id: shop_inventory
+    npcMessage: |
+      Looking to buy, are ya? I've got some basic gear here. Not my finest work, mind you,
+      but it'll do in a pinch.
+
+      What catches your eye?
+    choices:
+      - id: "1"
+        text: "How much for that dagger?"
+        nextNodeId: buy_dagger
+        condition:
+          type: stat
+          operator: greater_than
+          target: currency.gold
+          value: 25
+      - id: "2"
+        text: "That shield looks sturdy."
+        nextNodeId: buy_shield
+        condition:
+          type: stat
+          operator: greater_than
+          target: currency.gold
+          value: 40
+      - id: "3"
+        text: "Just browsing, thanks."
+        nextNodeId: blacksmith_greeting
+    variables:
+      last_choice: shop_inventory
+
+  buy_dagger:
+    id: buy_dagger
+    npcMessage: |
+      That dagger? Finely balanced, good steel. 25 gold pieces, and it's yours.
+
+      Interested?
+    choices:
+      - id: "1"
+        text: "I'll take it!"
+        nextNodeId: purchase_complete
+        actions:
+          - type: give_item
+            target: dagger
+          - type: add_flag
+            target: purchased_from_blacksmith
+      - id: "2"
+        text: "Too expensive."
+        nextNodeId: shop_inventory
+    variables:
+      last_choice: buy_dagger
+
+  buy_shield:
+    id: buy_shield
+    npcMessage: |
+      Good eye! This shield's made from reinforced oak with steel banding. 40 gold.
+
+      What do you say?
+    choices:
+      - id: "1"
+        text: "Sold!"
+        nextNodeId: purchase_complete
+        actions:
+          - type: give_item
+            target: shield
+          - type: add_flag
+            target: purchased_from_blacksmith
+      - id: "2"
+        text: "Maybe something else."
+        nextNodeId: shop_inventory
+    variables:
+      last_choice: buy_shield
+
+  purchase_complete:
+    id: purchase_complete
+    npcMessage: |
+      Good choice! That should serve you well. Come back if you need repairs or more gear.
+
+      {{friendly ? "Always good to see a satisfied customer." : "Pleasure doing business."}}
+    choices:
+      - id: "1"
+        text: "Thanks! See you later."
+        nextNodeId: farewell
+      - id: "2"
+        text: "Actually, let me look at something else."
+        nextNodeId: shop_inventory
+    variables:
+      friendly: true
+
+  casual_chat:
+    id: casual_chat
+    npcMessage: |
+      Heh, thanks. Been at this forge for 30 years. Started as an apprentice, now I run the place.
+      The work's hard, but there's nothing like the satisfaction of a well-forged blade.
+
+      So, what really brings you here?
+    choices:
+      - id: "1"
+        text: "I respect a master craftsman."
+        nextNodeId: friendly_chat
+        actions:
+          - type: set_variable
+            target: friendly
+            value: true
+      - id: "2"
+        text: "Can you teach me about smithing?"
+        nextNodeId: smithing_lesson
+        condition:
+          type: skill
+          operator: less_than
+          target: crafting
+          value: 10
+      - id: "3"
+        text: "Just passing through."
+        nextNodeId: blacksmith_greeting
+    variables:
+      friendly: true
+
+  friendly_chat:
+    id: friendly_chat
+    npcMessage: |
+      Respect, eh? Not many adventurers bother with that. Most just want to grab and go.
+      You seem different. Maybe I can help you out more than usual.
+
+      What do you really need?
+    choices:
+      - id: "1"
+        text: "Actually, I could use some crafting advice."
+        nextNodeId: smithing_lesson
+      - id: "2"
+        text: "Thanks, but I should get going."
+        nextNodeId: farewell
+    variables:
+      friendly: true
+
+  smithing_lesson:
+    id: smithing_lesson
+    npcMessage: |
+      Want to learn smithing? Well, I don't usually teach, but for you... The key is patience.
+      Heat the metal to the right temperature, strike true, and let the metal speak to you.
+
+      Here, try this simple exercise...
+    choices:
+      - id: "1"
+        text: "That was helpful, thank you!"
+        nextNodeId: farewell
+        actions:
+          - type: set_variable
+            target: friendly
+            value: true
+          - type: add_flag
+            target: smithing_lesson_completed
+      - id: "2"
+        text: "This seems complicated."
+        nextNodeId: blacksmith_greeting
+    variables:
+      friendly: true
+
+  farewell:
+    id: farewell
+    npcMessage: |
+      {{friendly ? "Good luck out there, friend. Come back anytime." : "Yeah, yeah. Don't let the door hit ya on the way out."}}
+    isEnd: true
+    variables:
+      last_choice: farewell
+
+metadata:
+  author: MUD Dialogue System
+  created: 2025-01-20T00:00:00Z
+  updated: 2025-01-20T00:00:00Z
+  tags:
+    - blacksmith
+    - crafting
+    - merchant
+    - shop
+    - repair
+    - fantasy

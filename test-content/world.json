@@ -1,0 +1,110 @@
+{
+  "sectors": [],
+  "areas": [],
+  "rooms": [
+    {
+      "id": "dee66e08-ec42-48fb-8364-cac49903d9f4",
+      "name": "Starting Room",
+      "description": "A room to start in",
+      "area": "test-area",
+      "exits": [
+        {
+          "id": "740d491d-4fb9-46d8-88c7-73702d52d4ee",
+          "direction": "north",
+          "toRoomId": "08b5bf71-6d4a-4749-9fee-5a20019e88ce",
+          "verbs": [
+            "north"
+          ],
+          "flags": []
+        }
+      ],
+      "items": [],
+      "npcs": [],
+      "players": [],
+      "flags": [],
+      "created": "2025-08-26T18:04:24.727Z",
+      "updated": "2025-08-26T18:04:24.727Z"
+    },
+    {
+      "id": "08b5bf71-6d4a-4749-9fee-5a20019e88ce",
+      "name": "Destination Room",
+      "description": "A room to go to",
+      "area": "test-area",
+      "exits": [
+        {
+          "id": "e3c12f7c-4e68-4538-9481-4439e37890c8",
+          "direction": "south",
+          "toRoomId": "dee66e08-ec42-48fb-8364-cac49903d9f4",
+          "verbs": [
+            "south"
+          ],
+          "flags": []
+        }
+      ],
+      "items": [],
+      "npcs": [],
+      "players": [],
+      "flags": [],
+      "created": "2025-08-26T18:04:24.727Z",
+      "updated": "2025-08-26T18:04:24.727Z"
+    },
+    {
+      "id": "1b66df1d-c305-46d0-9e6d-3f666535173e",
+      "name": "Item Room",
+      "description": "A room with items",
+      "area": "test-area",
+      "exits": [],
+      "items": [
+        "test-item"
+      ],
+      "npcs": [],
+      "players": [],
+      "flags": [],
+      "created": "2025-08-26T18:04:24.729Z",
+      "updated": "2025-08-26T18:04:24.729Z"
+    },
+    {
+      "id": "test-room",
+      "name": "Test Room",
+      "description": "A test room",
+      "area": "default",
+      "exits": [],
+      "items": [],
+      "npcs": [],
+      "players": [],
+      "flags": [],
+      "created": "2025-08-26T18:04:24.747Z",
+      "updated": "2025-08-26T18:04:24.747Z"
+    },
+    {
+      "id": "persist-room",
+      "name": "persist-room",
+      "description": "Updated description",
+      "area": "default",
+      "exits": [],
+      "items": [],
+      "npcs": [],
+      "players": [],
+      "flags": [],
+      "created": "2025-08-26T18:04:24.748Z",
+      "updated": "2025-08-26T18:04:24.748Z"
+    }
+  ],
+  "items": [
+    {
+      "id": "test-item",
+      "name": "test-item",
+      "description": "",
+      "type": "generic",
+      "flags": [],
+      "created": "2025-08-26T18:04:24.730Z",
+      "updated": "2025-08-26T18:04:24.730Z"
+    }
+  ],
+  "npcs": [],
+  "metadata": {
+    "version": "1.0.0",
+    "created": "2025-08-26T18:04:24.708Z",
+    "updated": "2025-08-26T18:04:24.749Z"
+  }
+}

@@ -1,0 +1,41 @@
+{
+  "id": "baker",
+  "name": "Mildred the Baker",
+  "description": "A cheerful woman with flour-dusted apron and a warm smile. The delicious aroma of fresh bread wafts around her. She's always ready to share gossip along with her baked goods.",
+  "shortDescription": "Mildred the Baker",
+  "dialogueProvider": "canned-branching",
+  "behaviors": ["cheerful", "merchant", "gossip", "friendly"],
+  "stats": {
+    "level": 3,
+    "health": 65,
+    "strength": 7,
+    "defense": 5,
+    "agility": 8,
+    "cooking": 14
+  },
+  "flags": ["merchant", "civilian", "human", "neutral", "informant"],
+  "spawnData": {
+    "npcId": "baker",
+    "sectorId": "town-sector",
+    "spawnRoomId": "eldoria:town_square",
+    "spawnConditions": [
+      {
+        "type": "player_enter",
+        "value": true
+      }
+    ],
+    "despawnConditions": [
+      {
+        "type": "no_players",
+        "delay": 60000
+      }
+    ]
+  },
+  "metadata": {
+    "version": "1.0.0",
+    "created": "2025-01-01T00:00:00.000Z",
+    "updated": "2025-01-01T00:00:00.000Z",
+    "author": "MUD Engine",
+    "description": "Town baker selling goods and sharing local gossip"
+  }
+}

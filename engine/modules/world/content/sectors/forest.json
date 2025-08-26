@@ -1,0 +1,166 @@
+{
+  "id": "forest-sector",
+  "name": "Surrounding Forest",
+  "description": "The dense forest surrounding the town with paths and clearings",
+  "rooms": [
+    {
+      "id": "eldoria:forest_path",
+      "name": "Forest Path",
+      "description": "A well-trodden path winding through ancient trees. Sunlight filters through the canopy, creating dappled patterns on the ground. The residential area is south, and deeper forest lies north.",
+      "area": "forest-sector",
+      "exits": [
+        {
+          "id": "forest-path-to-residential",
+          "direction": "south",
+          "toRoomId": "eldoria:residential_area",
+          "description": "Back to residential area",
+          "verbs": ["south", "town"],
+          "flags": []
+        },
+        {
+          "id": "forest-path-to-deep-forest",
+          "direction": "north",
+          "toRoomId": "eldoria:deep_forest",
+          "description": "Deeper into the forest",
+          "verbs": ["north", "deeper"],
+          "flags": []
+        }
+      ],
+      "items": ["stick"],
+      "npcs": [],
+      "players": [],
+      "flags": ["outdoor", "wild"],
+      "created": "2025-01-01T00:00:00.000Z",
+      "updated": "2025-01-01T00:00:00.000Z"
+    },
+    {
+      "id": "eldoria:deep_forest",
+      "name": "Deep Forest",
+      "description": "Thick trees surround you, their branches forming a dense canopy overhead. Strange sounds echo through the woods. The forest path is south, a clearing lies north, and a river crossing is east.",
+      "area": "forest-sector",
+      "exits": [
+        {
+          "id": "deep-forest-to-forest-path",
+          "direction": "south",
+          "toRoomId": "eldoria:forest_path",
+          "description": "Back to forest path",
+          "verbs": ["south", "path"],
+          "flags": []
+        },
+        {
+          "id": "deep-forest-to-forest-clearing",
+          "direction": "north",
+          "toRoomId": "eldoria:forest_clearing",
+          "description": "Forest clearing",
+          "verbs": ["north", "clearing"],
+          "flags": []
+        },
+        {
+          "id": "deep-forest-to-river-crossing",
+          "direction": "east",
+          "toRoomId": "eldoria:river_crossing",
+          "description": "River crossing",
+          "verbs": ["east", "river"],
+          "flags": []
+        }
+      ],
+      "items": [],
+      "npcs": ["wolf"],
+      "players": [],
+      "flags": ["outdoor", "wild", "dangerous"],
+      "created": "2025-01-01T00:00:00.000Z",
+      "updated": "2025-01-01T00:00:00.000Z"
+    },
+    {
+      "id": "eldoria:forest_clearing",
+      "name": "Forest Clearing",
+      "description": "A peaceful clearing in the forest with wildflowers and a small stream. Ancient stones arranged in a circle suggest this place has significance. The deep forest surrounds you.",
+      "area": "forest-sector",
+      "exits": [
+        {
+          "id": "forest-clearing-to-deep-forest",
+          "direction": "south",
+          "toRoomId": "eldoria:deep_forest",
+          "description": "Back to deep forest",
+          "verbs": ["south", "forest"],
+          "flags": []
+        }
+      ],
+      "items": ["ancient_stone", "wildflowers"],
+      "npcs": ["druid"],
+      "players": [],
+      "flags": ["outdoor", "magical"],
+      "created": "2025-01-01T00:00:00.000Z",
+      "updated": "2025-01-01T00:00:00.000Z"
+    }
+  ],
+  "items": [
+    {
+      "id": "stick",
+      "name": "a sturdy stick",
+      "description": "A sturdy branch that fell from a nearby tree",
+      "shortDescription": "sturdy stick",
+      "type": "weapon",
+      "portable": true,
+      "container": false,
+      "stats": { "damage": 2 },
+      "flags": ["wooden"],
+      "created": "2025-01-01T00:00:00.000Z",
+      "updated": "2025-01-01T00:00:00.000Z"
+    },
+    {
+      "id": "ancient_stone",
+      "name": "an ancient stone",
+      "description": "A weathered stone covered in strange runes",
+      "shortDescription": "ancient stone",
+      "type": "misc",
+      "portable": true,
+      "container": false,
+      "stats": {},
+      "flags": ["magical", "rune-covered"],
+      "created": "2025-01-01T00:00:00.000Z",
+      "updated": "2025-01-01T00:00:00.000Z"
+    },
+    {
+      "id": "wildflowers",
+      "name": "a bouquet of wildflowers",
+      "description": "Beautiful wildflowers in various colors",
+      "shortDescription": "wildflowers",
+      "type": "misc",
+      "portable": true,
+      "container": false,
+      "stats": {},
+      "flags": ["beautiful"],
+      "created": "2025-01-01T00:00:00.000Z",
+      "updated": "2025-01-01T00:00:00.000Z"
+    }
+  ],
+  "npcs": [
+    {
+      "id": "wolf",
+      "name": "a wild wolf",
+      "description": "A dangerous wolf with glowing eyes",
+      "shortDescription": "wolf",
+      "roomId": "deep_forest",
+      "dialogueProvider": "canned-branching",
+      "behaviors": ["aggressive", "animal"],
+      "stats": { "level": 4, "health": 80 },
+      "flags": ["animal", "dangerous"],
+      "created": "2025-01-01T00:00:00.000Z",
+      "updated": "2025-01-01T00:00:00.000Z"
+    },
+    {
+      "id": "druid",
+      "name": "an ancient druid",
+      "description": "A wise old druid meditating in the stone circle",
+      "shortDescription": "ancient druid",
+      "roomId": "forest_clearing",
+      "dialogueProvider": "canned-branching",
+      "behaviors": ["wise", "mysterious"],
+      "stats": { "level": 15, "health": 150, "mana": 200 },
+      "flags": ["magical", "quest-giver"],
+      "created": "2025-01-01T00:00:00.000Z",
+      "updated": "2025-01-01T00:00:00.000Z"
+    }
+  ]
+}

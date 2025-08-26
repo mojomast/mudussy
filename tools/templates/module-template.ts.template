@@ -1,0 +1,40 @@
+/**
+ * {{moduleName}} Module
+ *
+ * {{description}}
+ */
+
+import { IPlugin, IPluginMetadata } from '../../core/plugin';
+
+export interface I{{moduleName}}Config {
+  // Add configuration options here
+}
+
+export class {{moduleName}}Module implements IPlugin {
+  private config: I{{moduleName}}Config;
+
+  constructor(config: I{{moduleName}}Config = {}) {
+    this.config = config;
+  }
+
+  getMetadata(): IPluginMetadata {
+    return {
+      name: '{{moduleName}}',
+      version: '1.0.0',
+      description: '{{description}}',
+      dependencies: []
+    };
+  }
+
+  async initialize(): Promise<void> {
+    // Initialize module
+    console.log('{{moduleName}} module initialized');
+  }
+
+  async destroy(): Promise<void> {
+    // Cleanup module
+    console.log('{{moduleName}} module destroyed');
+  }
+
+  // Add module-specific methods here
+}

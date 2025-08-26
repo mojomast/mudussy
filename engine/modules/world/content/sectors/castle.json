@@ -1,0 +1,244 @@
+{
+  "id": "castle-sector",
+  "name": "Castle Eldoria",
+  "description": "The imposing castle with its grand halls, towers, and dungeons",
+  "rooms": [
+    {
+      "id": "eldoria:castle_gate",
+      "name": "Castle Gate",
+      "description": "Imposing castle gates with guards standing watch. The castle looms above, its towers reaching into the sky. The mountain path is west, and the castle courtyard lies north.",
+      "area": "castle-sector",
+      "exits": [
+        {
+          "id": "castle-gate-to-mountain-path",
+          "direction": "west",
+          "toRoomId": "eldoria:mountain_path",
+          "description": "Back to mountain path",
+          "verbs": ["west", "mountain"],
+          "flags": []
+        },
+        {
+          "id": "castle-gate-to-castle-courtyard",
+          "direction": "north",
+          "toRoomId": "eldoria:castle_courtyard",
+          "description": "Castle courtyard",
+          "verbs": ["north", "courtyard"],
+          "flags": []
+        }
+      ],
+      "items": [],
+      "npcs": ["castle_guard"],
+      "players": [],
+      "flags": ["outdoor", "guarded"],
+      "created": "2025-01-01T00:00:00.000Z",
+      "updated": "2025-01-01T00:00:00.000Z"
+    },
+    {
+      "id": "eldoria:castle_courtyard",
+      "name": "Castle Courtyard",
+      "description": "A large stone courtyard with gardens and training areas. Knights practice their swordplay, and servants go about their duties. The castle gate is south, great hall north, and tower up.",
+      "area": "castle-sector",
+      "exits": [
+        {
+          "id": "castle-courtyard-to-castle-gate",
+          "direction": "south",
+          "toRoomId": "eldoria:castle_gate",
+          "description": "Back to castle gate",
+          "verbs": ["south", "gate"],
+          "flags": []
+        },
+        {
+          "id": "castle-courtyard-to-great-hall",
+          "direction": "north",
+          "toRoomId": "eldoria:castle_great_hall",
+          "description": "Great hall",
+          "verbs": ["north", "hall"],
+          "flags": []
+        },
+        {
+          "id": "castle-courtyard-to-tower",
+          "direction": "up",
+          "toRoomId": "eldoria:castle_tower",
+          "description": "Castle tower",
+          "verbs": ["up", "tower"],
+          "flags": []
+        }
+      ],
+      "items": [],
+      "npcs": ["knight"],
+      "players": [],
+      "flags": ["outdoor", "castle"],
+      "created": "2025-01-01T00:00:00.000Z",
+      "updated": "2025-01-01T00:00:00.000Z"
+    },
+    {
+      "id": "eldoria:castle_great_hall",
+      "name": "Great Hall",
+      "description": "A magnificent hall with high ceilings, banners, and a throne at one end. Nobles and important visitors gather here. The courtyard is south, and dungeon stairs lead down.",
+      "area": "castle-sector",
+      "exits": [
+        {
+          "id": "great-hall-to-courtyard",
+          "direction": "south",
+          "toRoomId": "eldoria:castle_courtyard",
+          "description": "Back to courtyard",
+          "verbs": ["south", "courtyard"],
+          "flags": []
+        },
+        {
+          "id": "great-hall-to-dungeon",
+          "direction": "down",
+          "toRoomId": "eldoria:castle_dungeon",
+          "description": "Down to dungeon",
+          "verbs": ["down", "dungeon"],
+          "flags": []
+        }
+      ],
+      "items": ["crown"],
+      "npcs": ["noble"],
+      "players": [],
+      "flags": ["indoor", "castle", "important"],
+      "created": "2025-01-01T00:00:00.000Z",
+      "updated": "2025-01-01T00:00:00.000Z"
+    },
+    {
+      "id": "eldoria:castle_tower",
+      "name": "Castle Tower",
+      "description": "A tall tower offering panoramic views of the surrounding lands. From here you can see the entire valley and the mountains beyond. The courtyard is below.",
+      "area": "castle-sector",
+      "exits": [
+        {
+          "id": "castle-tower-to-courtyard",
+          "direction": "down",
+          "toRoomId": "eldoria:castle_courtyard",
+          "description": "Down to courtyard",
+          "verbs": ["down", "courtyard"],
+          "flags": []
+        }
+      ],
+      "items": ["telescope"],
+      "npcs": [],
+      "players": [],
+      "flags": ["indoor", "tower", "view"],
+      "created": "2025-01-01T00:00:00.000Z",
+      "updated": "2025-01-01T00:00:00.000Z"
+    },
+    {
+      "id": "eldoria:castle_dungeon",
+      "name": "Castle Dungeon",
+      "description": "Dark, damp dungeon cells line the walls. Chains hang from the ceiling, and the air is thick with the scent of mildew. The great hall is above.",
+      "area": "castle-sector",
+      "exits": [
+        {
+          "id": "castle-dungeon-to-great-hall",
+          "direction": "up",
+          "toRoomId": "eldoria:castle_great_hall",
+          "description": "Up to great hall",
+          "verbs": ["up", "hall"],
+          "flags": []
+        }
+      ],
+      "items": ["chain"],
+      "npcs": ["prisoner"],
+      "players": [],
+      "flags": ["indoor", "dungeon", "dangerous"],
+      "created": "2025-01-01T00:00:00.000Z",
+      "updated": "2025-01-01T00:00:00.000Z"
+    }
+  ],
+  "items": [
+    {
+      "id": "telescope",
+      "name": "a brass telescope",
+      "description": "A fine brass telescope for viewing distant objects",
+      "shortDescription": "telescope",
+      "type": "tool",
+      "portable": true,
+      "container": false,
+      "stats": {},
+      "flags": ["view"],
+      "created": "2025-01-01T00:00:00.000Z",
+      "updated": "2025-01-01T00:00:00.000Z"
+    },
+    {
+      "id": "crown",
+      "name": "a golden crown",
+      "description": "A magnificent golden crown adorned with jewels",
+      "shortDescription": "crown",
+      "type": "misc",
+      "portable": true,
+      "container": false,
+      "stats": { "value": 1000 },
+      "flags": ["valuable", "royal"],
+      "created": "2025-01-01T00:00:00.000Z",
+      "updated": "2025-01-01T00:00:00.000Z"
+    },
+    {
+      "id": "chain",
+      "name": "a rusty chain",
+      "description": "A heavy rusty chain, cold to the touch",
+      "shortDescription": "chain",
+      "type": "misc",
+      "portable": true,
+      "container": false,
+      "stats": {},
+      "flags": ["heavy"],
+      "created": "2025-01-01T00:00:00.000Z",
+      "updated": "2025-01-01T00:00:00.000Z"
+    }
+  ],
+  "npcs": [
+    {
+      "id": "castle_guard",
+      "name": "a castle guard",
+      "description": "A heavily armored guard protecting the castle",
+      "shortDescription": "castle guard",
+      "roomId": "castle_gate",
+      "dialogueProvider": "canned-branching",
+      "behaviors": ["protective", "stern"],
+      "stats": { "level": 10, "health": 150 },
+      "flags": ["guard", "elite"],
+      "created": "2025-01-01T00:00:00.000Z",
+      "updated": "2025-01-01T00:00:00.000Z"
+    },
+    {
+      "id": "knight",
+      "name": "Sir Lancelot",
+      "description": "A noble knight training in the courtyard",
+      "shortDescription": "Sir Lancelot",
+      "roomId": "castle_courtyard",
+      "dialogueProvider": "canned-branching",
+      "behaviors": ["noble", "honorable"],
+      "stats": { "level": 12, "health": 180 },
+      "flags": ["knight", "elite"],
+      "created": "2025-01-01T00:00:00.000Z",
+      "updated": "2025-01-01T00:00:00.000Z"
+    },
+    {
+      "id": "noble",
+      "name": "Lord Eldric",
+      "description": "A wealthy noble attending court",
+      "shortDescription": "Lord Eldric",
+      "roomId": "castle_great_hall",
+      "dialogueProvider": "canned-branching",
+      "behaviors": ["aristocratic", "proud"],
+      "stats": { "level": 8, "health": 120 },
+      "flags": ["noble"],
+      "created": "2025-01-01T00:00:00.000Z",
+      "updated": "2025-01-01T00:00:00.000Z"
+    },
+    {
+      "id": "prisoner",
+      "name": "a prisoner",
+      "description": "A ragged prisoner locked in the dungeon",
+      "shortDescription": "prisoner",
+      "roomId": "castle_dungeon",
+      "dialogueProvider": "canned-branching",
+      "behaviors": ["desperate", "talkative"],
+      "stats": { "level": 3, "health": 50 },
+      "flags": ["prisoner"],
+      "created": "2025-01-01T00:00:00.000Z",
+      "updated": "2025-01-01T00:00:00.000Z"
+    }
+  ]
+}

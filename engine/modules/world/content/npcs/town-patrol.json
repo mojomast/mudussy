@@ -1,0 +1,41 @@
+{
+  "id": "town_patrol",
+  "name": "Sergeant Thorne the Patrol Guard",
+  "description": "A weathered guard with a no-nonsense attitude, patrolling the town streets. His armor shows signs of wear from years of service, and he keeps a watchful eye on the townsfolk and visitors alike.",
+  "shortDescription": "Sergeant Thorne",
+  "dialogueProvider": "canned-branching",
+  "behaviors": ["vigilant", "protective", "no-nonsense", "helpful"],
+  "stats": {
+    "level": 10,
+    "health": 140,
+    "strength": 14,
+    "defense": 12,
+    "agility": 10,
+    "perception": 15
+  },
+  "flags": ["guard", "patrol", "human", "neutral"],
+  "spawnData": {
+    "npcId": "town_patrol",
+    "sectorId": "town-sector",
+    "spawnRoomId": "eldoria:main_street",
+    "spawnConditions": [
+      {
+        "type": "player_enter",
+        "value": true
+      }
+    ],
+    "despawnConditions": [
+      {
+        "type": "no_players",
+        "delay": 60000
+      }
+    ]
+  },
+  "metadata": {
+    "version": "1.0.0",
+    "created": "2025-01-01T00:00:00.000Z",
+    "updated": "2025-01-01T00:00:00.000Z",
+    "author": "MUD Engine",
+    "description": "Town patrol guard maintaining law and order"
+  }
+}

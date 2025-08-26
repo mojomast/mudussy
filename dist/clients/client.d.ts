@@ -1,0 +1,28 @@
+declare class MUDWebClient {
+    socket: any;
+    connected: boolean;
+    authenticated: boolean;
+    username: any;
+    initElements(): void;
+    statusElement: HTMLElement;
+    authForm: HTMLElement;
+    gameContainer: HTMLElement;
+    usernameInput: HTMLElement;
+    authButton: HTMLElement;
+    outputElement: HTMLElement;
+    commandInput: HTMLElement;
+    sendButton: HTMLElement;
+    initEventListeners(): void;
+    connect(): void;
+    authenticate(): void;
+    sendCommand(): void;
+    addMessage(content: any, type?: string): void;
+    updateStatus(text: any, className: any): void;
+    showAuthForm(): void;
+    hideAuthForm(): void;
+    showGameInterface(): void;
+    formatExits(exits: any): string;
+    initialize(): void;
+    stripAnsi(input: any): any;
+}
+declare const mudClient: MUDWebClient;

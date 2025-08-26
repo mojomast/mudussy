@@ -1,0 +1,194 @@
+---
+id: "villager-dialogue"
+name: "Village Elder Dialogue"
+description: "A branching dialogue tree for a village elder NPC"
+version: "1.0.0"
+startNodeId: "greeting"
+variables:
+  player_name: ""
+  has_quest: false
+  quest_completed: false
+
+nodes:
+  greeting:
+    id: "greeting"
+    npcMessage: "Greetings, traveler! Welcome to our humble village. What brings you to our lands?"
+    choices:
+      - id: "ask_about_village"
+        text: "Tell me about this village."
+        actions:
+          - type: "set_variable"
+            target: "asked_about_village"
+            value: true
+        nextNodeId: "village_info"
+      - id: "ask_for_quest"
+        text: "Do you have any work for me?"
+        conditions:
+          - type: "variable"
+            target: "has_quest"
+            operator: "equals"
+            value: false
+        nextNodeId: "quest_offer"
+      - id: "ask_for_quest_taken"
+        text: "About that quest..."
+        conditions:
+          - type: "variable"
+            target: "has_quest"
+            operator: "equals"
+            value: true
+        nextNodeId: "quest_status"
+      - id: "goodbye"
+        text: "Just passing through. Farewell!"
+        nextNodeId: "farewell"
+
+  village_info:
+    id: "village_info"
+    npcMessage: "Our village has stood for generations, protected by the ancient forest to the north and the river to the south. We've always been a peaceful folk, trading with nearby settlements and living off the land."
+    choices:
+      - id: "ask_about_forest"
+        text: "What's in the forest?"
+        nextNodeId: "forest_warning"
+      - id: "ask_about_river"
+        text: "Tell me about the river."
+        nextNodeId: "river_info"
+      - id: "back_to_greeting"
+        text: "I see. What else?"
+        nextNodeId: "greeting"
+
+  forest_warning:
+    id: "forest_warning"
+    npcMessage: "The forest is ancient and mysterious, filled with both wonder and danger. Many strange creatures dwell there, and some say there are ruins hidden deep within. Be careful if you venture there, traveler."
+    choices:
+      - id: "ask_about_creatures"
+        text: "What kind of creatures?"
+        nextNodeId: "creatures_info"
+      - id: "ask_about_ruins"
+        text: "Tell me about these ruins."
+        nextNodeId: "ruins_info"
+      - id: "back_to_village"
+        text: "I'll be careful. Back to the village?"
+        nextNodeId: "village_info"
+
+  creatures_info:
+    id: "creatures_info"
+    npcMessage: "There are wolves, bears, and stranger things... glowing spirits that some say are the ghosts of ancient villagers. We've learned to give the forest a wide berth after dark."
+    choices:
+      - id: "back_to_forest"
+        text: "Scary! Tell me about the ruins instead."
+        nextNodeId: "ruins_info"
+      - id: "back_to_greeting"
+        text: "Thanks for the warning. What else can you tell me?"
+        nextNodeId: "greeting"
+
+  ruins_info:
+    id: "ruins_info"
+    npcMessage: "The ruins are said to be from a time before our village existed. Some claim they belonged to a great civilization, others say they were built by magic. No one knows for sure, as few return from exploring them."
+    choices:
+      - id: "back_to_greeting"
+        text: "Intriguing! What else can you tell me?"
+        nextNodeId: "greeting"
+
+  river_info:
+    id: "river_info"
+    npcMessage: "The river provides us with fish, transportation, and fresh water. It flows from the mountains to the south and eventually joins the great sea. We have a small dock where traders sometimes stop."
+    choices:
+      - id: "ask_about_traders"
+        text: "What traders come here?"
+        nextNodeId: "traders_info"
+      - id: "back_to_greeting"
+        text: "Interesting. What else?"
+        nextNodeId: "greeting"
+
+  traders_info:
+    id: "traders_info"
+    npcMessage: "Traders from the coastal cities bring spices, cloth, and metalwork. In return, we give them our timber, herbs, and crafts. It's a fair exchange that benefits everyone."
+    choices:
+      - id: "back_to_greeting"
+        text: "Sounds prosperous. What else?"
+        nextNodeId: "greeting"
+
+  quest_offer:
+    id: "quest_offer"
+    npcMessage: "Actually, yes! We've been having trouble with wolves coming too close to the village. If you could hunt down 3 wolves in the forest, we'd be very grateful. I'll reward you with a fine sword!"
+    choices:
+      - id: "accept_quest"
+        text: "I'll help with the wolves."
+        actions:
+          - type: "set_variable"
+            target: "has_quest"
+            value: true
+        nextNodeId: "quest_accepted"
+      - id: "decline_quest"
+        text: "I'm not ready for that right now."
+        nextNodeId: "quest_declined"
+
+  quest_accepted:
+    id: "quest_accepted"
+    npcMessage: "Excellent! Head north into the forest and look for wolf tracks. Be careful, and return to me when you've slain 3 wolves. May the spirits guide you!"
+    choices:
+      - id: "back_to_greeting"
+        text: "I'll be back soon!"
+        nextNodeId: "greeting"
+
+  quest_declined:
+    id: "quest_declined"
+    npcMessage: "I understand. Perhaps when you're stronger. In the meantime, is there anything else I can help you with?"
+    choices:
+      - id: "back_to_greeting"
+        text: "Maybe later. What else can you tell me?"
+        nextNodeId: "greeting"
+
+  quest_status:
+    id: "quest_status"
+    npcMessage: "How goes the wolf hunt? Have you made progress?"
+    choices:
+      - id: "quest_incomplete"
+        text: "Still working on it."
+        conditions:
+          - type: "variable"
+            target: "quest_completed"
+            operator: "equals"
+            value: false
+        nextNodeId: "quest_continue"
+      - id: "quest_complete"
+        text: "I've slain the wolves!"
+        conditions:
+          - type: "variable"
+            target: "quest_completed"
+            operator: "equals"
+            value: true
+        nextNodeId: "quest_reward"
+
+  quest_continue:
+    id: "quest_continue"
+    npcMessage: "Take your time, but don't be too long. The wolves are getting bolder. Return to me when you've completed the task."
+    choices:
+      - id: "back_to_greeting"
+        text: "I'll finish soon."
+        nextNodeId: "greeting"
+
+  quest_reward:
+    id: "quest_reward"
+    npcMessage: "Outstanding work, brave adventurer! You've rid us of the wolf threat. As promised, here's your reward - a finely crafted sword, passed down from my grandfather."
+    actions:
+      - type: "give_item"
+        target: "player"
+        value: "villager_sword"
+      - type: "set_variable"
+        target: "has_quest"
+        value: false
+    choices:
+      - id: "thank_and_leave"
+        text: "Thank you! I should be going."
+        nextNodeId: "farewell"
+
+  farewell:
+    id: "farewell"
+    npcMessage: "Safe travels, traveler! May your journey be filled with adventure and good fortune. Come back and visit us again sometime."
+    isEnd: true
+
+metadata:
+  author: "MUD Engine Test Suite"
+  created: "2025-01-25T00:00:00Z"
+  updated: "2025-01-25T00:00:00Z"
+  tags: ["village", "quest", "tutorial"]

@@ -1,0 +1,42 @@
+{
+  "id": "jeweler",
+  "name": "Master Thorne the Jeweler",
+  "description": "A meticulous man with a jeweler's loupe permanently attached to one eye. His workbench is covered with tiny tools and precious gems. Glass cases display exquisite jewelry that sparkles under the light.",
+  "shortDescription": "Master Thorne",
+  "dialogueProvider": "canned-branching",
+  "behaviors": ["meticulous", "merchant", "craftsman", "appraiser"],
+  "stats": {
+    "level": 7,
+    "health": 85,
+    "strength": 7,
+    "defense": 6,
+    "agility": 10,
+    "dexterity": 18,
+    "appraisal": 16
+  },
+  "flags": ["merchant", "craftsman", "human", "neutral"],
+  "spawnData": {
+    "npcId": "jeweler",
+    "sectorId": "town-sector",
+    "spawnRoomId": "eldoria:town_square",
+    "spawnConditions": [
+      {
+        "type": "player_enter",
+        "value": true
+      }
+    ],
+    "despawnConditions": [
+      {
+        "type": "no_players",
+        "delay": 60000
+      }
+    ]
+  },
+  "metadata": {
+    "version": "1.0.0",
+    "created": "2025-01-01T00:00:00.000Z",
+    "updated": "2025-01-01T00:00:00.000Z",
+    "author": "MUD Engine",
+    "description": "Master jeweler crafting and selling precious jewelry"
+  }
+}

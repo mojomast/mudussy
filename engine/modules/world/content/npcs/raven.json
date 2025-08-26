@@ -1,0 +1,41 @@
+{
+  "id": "raven",
+  "name": "a watchful raven",
+  "description": "A sleek black raven with intelligent eyes, perched on a branch or stone. It watches your movements closely and occasionally lets out a croaking call that echoes through the area.",
+  "shortDescription": "watchful raven",
+  "dialogueProvider": "canned-branching",
+  "behaviors": ["watchful", "intelligent", "animal", "messenger"],
+  "stats": {
+    "level": 1,
+    "health": 20,
+    "strength": 2,
+    "defense": 2,
+    "agility": 12,
+    "perception": 10
+  },
+  "flags": ["animal", "neutral", "bird"],
+  "spawnData": {
+    "npcId": "raven",
+    "sectorId": "castle-sector",
+    "spawnRoomId": "eldoria:castle_tower",
+    "spawnConditions": [
+      {
+        "type": "player_enter",
+        "value": true
+      }
+    ],
+    "despawnConditions": [
+      {
+        "type": "no_players",
+        "delay": 45000
+      }
+    ]
+  },
+  "metadata": {
+    "version": "1.0.0",
+    "created": "2025-01-01T00:00:00.000Z",
+    "updated": "2025-01-01T00:00:00.000Z",
+    "author": "MUD Engine",
+    "description": "Intelligent raven that observes and sometimes carries messages"
+  }
+}

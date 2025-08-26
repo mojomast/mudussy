@@ -1,0 +1,231 @@
+version: "1.0"
+npc: apothecary
+dialogue:
+  greeting:
+    text: "Welcome to my humble shop, traveler. I am Madam Elowen, keeper of potions, herbs, and remedies. What ails you, or what wisdom do you seek?"
+    responses:
+      - text: "I need healing potions."
+        next: healing_potions
+      - text: "Tell me about your herbs."
+        next: herbs_info
+        conditions:
+          - type: "reputation"
+            faction: "apothecary"
+            min_value: 5
+      - text: "Do you have any rare ingredients?"
+        next: rare_ingredients
+        conditions:
+          - type: "reputation"
+            faction: "apothecary"
+            min_value: 20
+          - type: "player_level"
+            min_level: 8
+          - type: "quest_completed"
+            quest_id: "herbalist_training"
+      - text: "Can you teach me about herbalism?"
+        next: herbalism_training
+        conditions:
+          - type: "gold_check"
+            min_amount: 50
+          - type: "stat_check"
+            stat: "intelligence"
+            min_value: 10
+      - text: "Just browsing, thank you."
+        next: farewell
+
+  herbalism_training:
+    text: "Ah, you show promise as a herbalist! For 50 gold, I can teach you the basics of identifying and preparing herbs. This knowledge will serve you well on your adventures."
+    responses:
+      - text: "Teach me the ways of herbs!"
+        next: teach_herbalism
+      - text: "That's too expensive right now."
+        next: farewell
+
+  teach_herbalism:
+    text: "Very well! *spends time teaching you* You now know how to identify wolfsbane, nightshade, and healing herbs. Use this knowledge wisely, and remember - some herbs can be deadly if prepared incorrectly."
+    triggers:
+      - type: "spend_gold"
+        amount: 50
+      - type: "teach_skill"
+        skill: "herbalism"
+        amount: 3
+      - type: "change_reputation"
+        faction: "apothecary"
+        amount: 10
+      - type: "start_quest"
+        quest_id: "herbalist_training"
+    responses:
+      - text: "Thank you for this knowledge!"
+        next: end
+
+  healing_potions:
+    text: "Ah, the call of battle leaves its mark on many. I have potions that can restore your health, remove poisons, or cure diseases. A simple healing potion costs 15 gold coins."
+    responses:
+      - text: "I'll take a healing potion."
+        next: buy_healing
+        conditions:
+          - type: "gold_check"
+            min_amount: 15
+      - text: "Too expensive for now."
+        next: farewell
+      - text: "Tell me about other potions."
+        next: other_potions
+
+  buy_healing:
+    text: "A wise choice! This potion will restore 50 health points when consumed. May it serve you well in your adventures."
+    triggers:
+      - type: "sell_item"
+        item_id: "healing_potion"
+        cost: 15
+        currency: "gold_coin"
+      - type: "change_reputation"
+        faction: "apothecary"
+        amount: 2
+    responses:
+      - text: "Thank you, Madam Elowen."
+        next: end
+
+  other_potions:
+    text: "I also craft potions of strength (25 gold - increases your power temporarily), elixirs of clarity (20 gold - enhances wisdom), and antidotes for poisons (30 gold)."
+    responses:
+      - text: "I'll take a strength potion."
+        next: buy_strength
+        conditions:
+          - type: "gold_check"
+            min_amount: 25
+          - type: "player_level"
+            min_level: 3
+      - text: "The elixir of clarity sounds good."
+        next: buy_clarity
+        conditions:
+          - type: "gold_check"
+            min_amount: 20
+      - text: "I need an antidote."
+        next: buy_antidote
+        conditions:
+          - type: "gold_check"
+            min_amount: 30
+          - type: "item_owned"
+            item_id: "poison_antidote"
+            owned: false
+      - text: "That's all for now."
+        next: farewell
+
+  buy_strength:
+    text: "The potion of strength will increase your physical power for a time. Use it wisely in battle!"
+    triggers:
+      - type: "sell_item"
+        item_id: "strength_potion"
+        cost: 25
+        currency: "gold_coin"
+      - type: "change_reputation"
+        faction: "apothecary"
+        amount: 3
+    responses:
+      - text: "Thank you!"
+        next: end
+
+  buy_clarity:
+    text: "The elixir of clarity will sharpen your mind and enhance your wisdom. Perfect for scholars and mages!"
+    triggers:
+      - type: "sell_item"
+        item_id: "clarity_elixir"
+        cost: 20
+        currency: "gold_coin"
+      - type: "change_reputation"
+        faction: "apothecary"
+        amount: 3
+    responses:
+      - text: "Thank you!"
+        next: end
+
+  buy_antidote:
+    text: "The antidote will cure most poisons. Keep it safe - you never know when it might save a life!"
+    triggers:
+      - type: "sell_item"
+        item_id: "antidote"
+        cost: 30
+        currency: "gold_coin"
+      - type: "change_reputation"
+        faction: "apothecary"
+        amount: 5
+    responses:
+      - text: "Thank you!"
+        next: end
+
+  herbs_info:
+    text: "Herbs are nature's gift to healers. I have wolfsbane for strength, nightshade for stealth, and lavender for calm. Each has its uses in potions and remedies."
+    triggers:
+      - type: "teach_skill"
+        skill: "herbalism"
+        amount: 1
+      - type: "change_reputation"
+        faction: "apothecary"
+        amount: 5
+    responses:
+      - text: "That's fascinating!"
+        next: farewell
+      - text: "Can I buy some herbs?"
+        next: buy_herbs
+        conditions:
+          - type: "gold_check"
+            min_amount: 5
+
+  buy_herbs:
+    text: "Of course! I have herb bundles for 5 gold coins each. They contain a mixture of useful plants for crafting your own potions."
+    triggers:
+      - type: "sell_item"
+        item_id: "herb_bundle"
+        cost: 5
+        currency: "gold_coin"
+      - type: "change_reputation"
+        faction: "apothecary"
+        amount: 2
+    responses:
+      - text: "I'll take one."
+        next: end
+
+  rare_ingredients:
+    text: "Rare ingredients are hard to come by, but I occasionally obtain dragon scales, unicorn horns, and phoenix feathers. These are extremely valuable and not for sale to just anyone."
+    responses:
+      - text: "I'm willing to pay whatever it costs."
+        next: rare_price
+      - text: "Perhaps another time."
+        next: farewell
+
+  rare_price:
+    text: "Very well. A dragon scale costs 100 gold coins. It can be used to craft powerful fire-resistant armor."
+    responses:
+      - text: "I'll take the dragon scale."
+        next: buy_dragon_scale
+        conditions:
+          - type: "gold_check"
+            min_amount: 100
+      - text: "That's too much for me."
+        next: farewell
+
+  buy_dragon_scale:
+    text: "An excellent choice! This dragon scale is genuine and quite potent. May it serve you well!"
+    triggers:
+      - type: "sell_item"
+        item_id: "dragon_scale"
+        cost: 100
+        currency: "gold_coin"
+      - type: "change_reputation"
+        faction: "apothecary"
+        amount: 15
+      - type: "unlock_achievement"
+        achievement_id: "rare_trader"
+    responses:
+      - text: "Thank you, Madam Elowen."
+        next: end
+
+  farewell:
+    text: "May your path be safe and your remedies effective. Return if you need healing or wisdom, traveler."
+    responses:
+      - text: "Farewell, Madam Elowen."
+        next: end
+
+  end:
+    text: ""
+    responses: []

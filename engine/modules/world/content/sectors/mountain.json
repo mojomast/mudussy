@@ -1,0 +1,127 @@
+{
+  "id": "mountain-sector",
+  "name": "Mountain Region",
+  "description": "The rugged mountains with caves and paths leading to adventure",
+  "rooms": [
+    {
+      "id": "eldoria:river_crossing",
+      "name": "River Crossing",
+      "description": "A wooden bridge crosses a fast-moving river. The water rushes loudly below, making it difficult to hear. The deep forest is west, and mountain paths lead east.",
+      "area": "mountain-sector",
+      "exits": [
+        {
+          "id": "river-crossing-to-deep-forest",
+          "direction": "west",
+          "toRoomId": "eldoria:deep_forest",
+          "description": "Back to deep forest",
+          "verbs": ["west", "forest"],
+          "flags": []
+        },
+        {
+          "id": "river-crossing-to-mountain-path",
+          "direction": "east",
+          "toRoomId": "eldoria:mountain_path",
+          "description": "Mountain path",
+          "verbs": ["east", "mountain"],
+          "flags": []
+        }
+      ],
+      "items": [],
+      "npcs": [],
+      "players": [],
+      "flags": ["outdoor", "bridge"],
+      "created": "2025-01-01T00:00:00.000Z",
+      "updated": "2025-01-01T00:00:00.000Z"
+    },
+    {
+      "id": "eldoria:mountain_path",
+      "name": "Mountain Path",
+      "description": "A steep path winds up into the mountains. The air is cooler here, and the terrain becomes more rugged. The river crossing is west, a cave entrance is north, and the castle gate looms east.",
+      "area": "mountain-sector",
+      "exits": [
+        {
+          "id": "mountain-path-to-river-crossing",
+          "direction": "west",
+          "toRoomId": "eldoria:river_crossing",
+          "description": "Back to river crossing",
+          "verbs": ["west", "river"],
+          "flags": []
+        },
+        {
+          "id": "mountain-path-to-mountain-cave",
+          "direction": "north",
+          "toRoomId": "eldoria:mountain_cave",
+          "description": "Mountain cave entrance",
+          "verbs": ["north", "cave"],
+          "flags": []
+        },
+        {
+          "id": "mountain-path-to-castle-gate",
+          "direction": "east",
+          "toRoomId": "eldoria:castle_gate",
+          "description": "Castle gate",
+          "verbs": ["east", "castle"],
+          "flags": []
+        }
+      ],
+      "items": [],
+      "npcs": [],
+      "players": [],
+      "flags": ["outdoor", "mountain"],
+      "created": "2025-01-01T00:00:00.000Z",
+      "updated": "2025-01-01T00:00:00.000Z"
+    },
+    {
+      "id": "eldoria:mountain_cave",
+      "name": "Mountain Cave",
+      "description": "A dark cave entrance in the mountainside. Strange sounds echo from within, and the air is cool and damp. The mountain path is south.",
+      "area": "mountain-sector",
+      "exits": [
+        {
+          "id": "mountain-cave-to-mountain-path",
+          "direction": "south",
+          "toRoomId": "eldoria:mountain_path",
+          "description": "Back to mountain path",
+          "verbs": ["south", "path"],
+          "flags": []
+        }
+      ],
+      "items": ["crystal"],
+      "npcs": ["bear"],
+      "players": [],
+      "flags": ["indoor", "cave", "dangerous"],
+      "created": "2025-01-01T00:00:00.000Z",
+      "updated": "2025-01-01T00:00:00.000Z"
+    }
+  ],
+  "items": [
+    {
+      "id": "crystal",
+      "name": "a glowing crystal",
+      "description": "A crystal that glows with an inner light",
+      "shortDescription": "crystal",
+      "type": "misc",
+      "portable": true,
+      "container": false,
+      "stats": {},
+      "flags": ["magical", "light"],
+      "created": "2025-01-01T00:00:00.000Z",
+      "updated": "2025-01-01T00:00:00.000Z"
+    }
+  ],
+  "npcs": [
+    {
+      "id": "bear",
+      "name": "a cave bear",
+      "description": "A massive bear guarding the cave entrance",
+      "shortDescription": "cave bear",
+      "roomId": "mountain_cave",
+      "dialogueProvider": "canned-branching",
+      "behaviors": ["aggressive", "animal"],
+      "stats": { "level": 8, "health": 140 },
+      "flags": ["animal", "dangerous"],
+      "created": "2025-01-01T00:00:00.000Z",
+      "updated": "2025-01-01T00:00:00.000Z"
+    }
+  ]
+}

@@ -1,0 +1,41 @@
+{
+  "id": "castle_captain",
+  "name": "Captain Valeria Stormshield",
+  "description": "A stern woman with a commanding presence, wearing gleaming armor with the royal crest. Her sword hangs at her side, and she oversees the castle guards with sharp, discerning eyes.",
+  "shortDescription": "Captain Valeria",
+  "dialogueProvider": "canned-branching",
+  "behaviors": ["authoritative", "protective", "disciplined", "leader"],
+  "stats": {
+    "level": 15,
+    "health": 180,
+    "strength": 16,
+    "defense": 14,
+    "agility": 12,
+    "leadership": 18
+  },
+  "flags": ["guard", "elite", "leader", "human", "neutral"],
+  "spawnData": {
+    "npcId": "castle_captain",
+    "sectorId": "castle-sector",
+    "spawnRoomId": "eldoria:castle_courtyard",
+    "spawnConditions": [
+      {
+        "type": "player_enter",
+        "value": true
+      }
+    ],
+    "despawnConditions": [
+      {
+        "type": "no_players",
+        "delay": 60000
+      }
+    ]
+  },
+  "metadata": {
+    "version": "1.0.0",
+    "created": "2025-01-01T00:00:00.000Z",
+    "updated": "2025-01-01T00:00:00.000Z",
+    "author": "MUD Engine",
+    "description": "Castle captain overseeing the guard forces"
+  }
+}

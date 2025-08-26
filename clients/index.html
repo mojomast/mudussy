@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MUD Engine Web Client</title>
+    <style>
+        body {
+            font-family: 'Courier New', monospace;
+            background-color: #000;
+            color: #0f0;
+            margin: 0;
+            padding: 20px;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .header {
+            text-align: center;
+            border-bottom: 1px solid #0f0;
+            padding-bottom: 10px;
+            margin-bottom: 20px;
+        }
+
+        .game-container {
+            display: flex;
+            flex-direction: column;
+            height: calc(100vh - 100px);
+        }
+
+        .output-area {
+            flex: 1;
+            background-color: #001100;
+            border: 1px solid #0f0;
+            padding: 10px;
+            overflow-y: auto;
+            margin-bottom: 10px;
+            white-space: pre-wrap;
+        }
+
+        .input-area {
+            display: flex;
+            gap: 10px;
+        }
+
+        .command-input {
+            flex: 1;
+            background-color: #001100;
+            border: 1px solid #0f0;
+            color: #0f0;
+            padding: 8px;
+            font-family: inherit;
+            font-size: 14px;
+        }
+
+        .command-input:focus {
+            outline: none;
+            border-color: #4f4;
+        }
+
+        .send-button {
+            background-color: #0f0;
+            color: #000;
+            border: none;
+            padding: 8px 16px;
+            cursor: pointer;
+            font-family: inherit;
+            font-weight: bold;
+        }
+
+        .send-button:hover {
+            background-color: #4f4;
+        }
+
+        .send-button:disabled {
+            background-color: #444;
+            color: #888;
+            cursor: not-allowed;
+        }
+
+        .status {
+            position: fixed;
+            top: 10px;
+            right: 20px;
+            padding: 5px 10px;
+            background-color: #001100;
+            border: 1px solid #0f0;
+            font-size: 12px;
+        }
+
+        .status.connected {
+            border-color: #0f0;
+        }
+
+        .status.disconnected {
+            border-color: #f00;
+            color: #f00;
+        }
+
+        .status.authenticating {
+            border-color: #ff0;
+            color: #ff0;
+        }
+
+        .message {
+            margin-bottom: 5px;
+        }
+
+        .message.system {
+            color: #0ff;
+        }
+
+        .message.user {
+            color: #0f0;
+        }
+
+        .message.error {
+            color: #f00;
+        }
+
+        .auth-form {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color: #001100;
+            border: 2px solid #0f0;
+            padding: 20px;
+            text-align: center;
+        }
+
+        .auth-form.show {
+            display: block;
+        }
+
+        .auth-input {
+            background-color: #000;
+            border: 1px solid #0f0;
+            color: #0f0;
+            padding: 8px;
+            margin: 10px 0;
+            width: 200px;
+            font-family: inherit;
+        }
+
+        .auth-button {
+            background-color: #0f0;
+            color: #000;
+            border: none;
+            padding: 8px 16px;
+            cursor: pointer;
+            font-family: inherit;
+            margin: 5px;
+        }
+    </style>
+</head>
+<body>
+    <div class="status disconnected" id="status">Disconnected</div>
+
+    <div class="header">
+        <h1>MUD Engine Web Client</h1>
+    </div>
+
+    <div class="auth-form show" id="authForm">
+        <h3>Enter Username</h3>
+        <input type="text" id="usernameInput" class="auth-input" placeholder="Username" autofocus>
+        <br>
+        <button id="authButton" class="auth-button">Connect</button>
+    </div>
+
+    <div class="game-container" id="gameContainer" style="display: none;">
+        <div class="output-area" id="output"></div>
+        <div class="input-area">
+            <input type="text" id="commandInput" class="command-input" placeholder="Enter command..." disabled>
+            <button id="sendButton" class="send-button" disabled>Send</button>
+        </div>
+    </div>
+
+    <!-- Socket.IO client from server -->
+    <script src="/socket.io/socket.io.js"></script>
+    <script src="client.js"></script>
+</body>
+</html>

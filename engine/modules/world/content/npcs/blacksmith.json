@@ -1,0 +1,41 @@
+{
+  "id": "blacksmith",
+  "name": "a sturdy blacksmith",
+  "description": "A strong blacksmith with muscular arms and a soot-stained apron. He's hammering away at a piece of hot metal on his anvil, the sound of metal on metal echoing through the shop.",
+  "shortDescription": "blacksmith",
+  "dialogueProvider": "canned-branching",
+  "behaviors": ["gruff", "merchant", "craftsman", "knowledgeable"],
+  "stats": {
+    "level": 6,
+    "health": 110,
+    "strength": 16,
+    "defense": 8,
+    "agility": 8,
+    "crafting": 18
+  },
+  "flags": ["shopkeeper", "craftsman", "human", "neutral"],
+  "spawnData": {
+    "npcId": "blacksmith",
+    "sectorId": "town-sector",
+    "spawnRoomId": "eldoria:blacksmith",
+    "spawnConditions": [
+      {
+        "type": "player_enter",
+        "value": true
+      }
+    ],
+    "despawnConditions": [
+      {
+        "type": "no_players",
+        "delay": 60000
+      }
+    ]
+  },
+  "metadata": {
+    "version": "1.0.0",
+    "created": "2025-01-01T00:00:00.000Z",
+    "updated": "2025-01-01T00:00:00.000Z",
+    "author": "MUD Engine",
+    "description": "Town blacksmith NPC with crafting and merchant behaviors"
+  }
+}

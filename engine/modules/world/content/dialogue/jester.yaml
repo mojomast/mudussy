@@ -1,0 +1,251 @@
+version: "1.0"
+npc: jester
+dialogue:
+  greeting:
+    text: "Hail and well met, noble wanderer! I am Jolly the Jester, master of mirth and mayhem! What brings such a serious face to my domain? A joke? A riddle? Or perhaps you seek wisdom in the form of foolishness?"
+    responses:
+      - text: "Tell me a joke!"
+        next: joke
+      - text: "Give me a riddle."
+        next: riddle
+        conditions:
+          - type: "stat_check"
+            stat: "intelligence"
+            min_value: 8
+      - text: "Give me an easy riddle."
+        next: easy_riddle
+        conditions:
+          - type: "stat_check"
+            stat: "intelligence"
+            max_value: 7
+      - text: "What's the latest news?"
+        next: news
+        conditions:
+          - type: "time_since_visit"
+            min_hours: 4
+      - text: "I must be going."
+        next: farewell
+
+  joke:
+    text: "Why did the scarecrow win an award? Because he was outstanding in his field! *falls over laughing* Oh, the hilarity! Did that tickle your funny bone?"
+    responses:
+      - text: "That's hilarious!"
+        next: happy_response
+      - text: "That was terrible."
+        next: offended_response
+      - text: "Tell me another one!"
+        next: another_joke
+
+  another_joke:
+    text: "Very well! Why don't skeletons fight each other? They don't have the guts! *clutches sides in laughter* Oh, the puns! The puns are killing me!"
+    responses:
+      - text: "You're on fire today!"
+        next: happy_response
+      - text: "Please stop..."
+        next: offended_response
+      - text: "One more!"
+        next: final_joke
+
+  final_joke:
+    text: "Last one, I promise! What do you call fake spaghetti? An impasta! *dissolves into giggles* Oh dear, I think I've reached peak foolishness!"
+    responses:
+      - text: "That's the best one yet!"
+        next: happy_response
+      - text: "I need a break from these jokes."
+        next: farewell
+
+  happy_response:
+    text: "*bows dramatically* Ah, a person of refined taste! Your appreciation warms my heart like a good stew warms the belly. Is there anything else Jolly can do for you?"
+    triggers:
+      - type: "change_mood"
+        target: "player"
+        effect: "happy"
+        duration: 300
+      - type: "give_item"
+        item_id: "copper_coin"
+        quantity: 2
+    responses:
+      - text: "Tell me a riddle instead."
+        next: riddle
+      - text: "What's happening in town?"
+        next: news
+      - text: "That was enough for now."
+        next: farewell
+
+  offended_response:
+    text: "*looks crestfallen* Oh dear, my jokes have missed their mark! Perhaps my humor is too sophisticated for mortal minds. Or perhaps I need more practice. Would you like to try a riddle instead?"
+    responses:
+      - text: "Yes, a riddle please."
+        next: riddle
+      - text: "Just tell me the news."
+        next: news
+      - text: "I should leave."
+        next: farewell
+
+  easy_riddle:
+    text: "A simple one for you! What has keys but can't open locks? *winks* Think about music!"
+    responses:
+      - text: "A piano!"
+        next: correct_easy
+      - text: "A door!"
+        next: wrong_easy
+      - text: "A treasure chest!"
+        next: wrong_easy
+      - text: "I give up."
+        next: give_up_easy
+
+  correct_easy:
+    text: "*claps enthusiastically* A piano! You got it! You're smarter than you look. Here's a small reward for your cleverness!"
+    triggers:
+      - type: "give_item"
+        item_id: "copper_coin"
+        quantity: 3
+      - type: "change_stat"
+        stat: "intelligence"
+        amount: 1
+        duration: 300
+    responses:
+      - text: "Thank you!"
+        next: farewell
+
+  wrong_easy:
+    text: "Not quite! It's a piano - you know, the musical instrument! But don't feel bad - riddles can be tricky."
+    responses:
+      - text: "I see now!"
+        next: farewell
+
+  give_up_easy:
+    text: "It's a piano! Ah well, perhaps you'll get the next one. Keep practicing!"
+    responses:
+      - text: "I'll try harder next time."
+        next: farewell
+
+  riddle:
+    text: "Ah, riddles! My favorite! Here's one for you: I speak without a mouth and hear without ears. I have no body, but I come alive with the wind. What am I?"
+    responses:
+      - text: "An echo!"
+        next: correct_riddle
+      - text: "The wind!"
+        next: wrong_riddle
+      - text: "A ghost!"
+        next: wrong_riddle
+      - text: "I give up."
+        next: give_up_riddle
+
+  correct_riddle:
+    text: "*claps excitedly* Brilliant! You solved it! An echo indeed! You have a sharp mind beneath that serious exterior. Would you like another riddle?"
+    triggers:
+      - type: "give_item"
+        item_id: "silver_coin"
+        quantity: 1
+      - type: "change_stat"
+        stat: "intelligence"
+        amount: 1
+        duration: 600
+    responses:
+      - text: "Yes, one more!"
+        next: second_riddle
+      - text: "That's enough riddles."
+        next: news
+      - text: "Time for me to go."
+        next: farewell
+
+  wrong_riddle:
+    text: "*shakes head sadly* Oh, so close but not quite! It was an echo! But don't feel bad - even kings struggle with my riddles sometimes. Care to try another?"
+    responses:
+      - text: "Yes, give me another chance."
+        next: second_riddle
+      - text: "I'd rather hear the news."
+        next: news
+      - text: "I should be going."
+        next: farewell
+
+  give_up_riddle:
+    text: "The answer was an echo! But no matter - not everyone can keep up with my clever mind. Perhaps you'd like to hear some news instead?"
+    responses:
+      - text: "Yes, tell me the news."
+        next: news
+      - text: "I should leave now."
+        next: farewell
+
+  second_riddle:
+    text: "Very well! Here's another: The more you take, the more you leave behind. What am I?"
+    responses:
+      - text: "Footsteps!"
+        next: correct_second
+      - text: "Memories!"
+        next: wrong_second
+      - text: "Time!"
+        next: wrong_second
+      - text: "I don't know."
+        next: give_up_second
+
+  correct_second:
+    text: "*applauds enthusiastically* Footsteps! Excellent! You're quite the riddle master! I bow to your superior wit."
+    responses:
+      - text: "Thank you! That was fun."
+        next: farewell
+      - text: "What's the latest gossip?"
+        next: news
+
+  wrong_second:
+    text: "It was footsteps! But you're still doing wonderfully for a beginner. Riddles aren't for everyone, you know."
+    responses:
+      - text: "Tell me some news instead."
+        next: news
+      - text: "I think I'm done."
+        next: farewell
+
+  give_up_second:
+    text: "The answer was footsteps! Ah well, riddles aren't for everyone. Would you like to hear the latest news instead?"
+    responses:
+      - text: "Yes, tell me the news."
+        next: news
+      - text: "No, I should go."
+        next: farewell
+
+  news:
+    text: "*leans in conspiratorially* Ah, the news! The juiciest gossip from around the realm! The king is planning a grand tournament, the blacksmith has crafted a legendary sword, and there's talk of a dragon in the northern mountains! Plus, the baker's pies are simply divine!"
+    triggers:
+      - type: "reveal_info"
+        info_type: "rumor"
+        content: "grand_tournament"
+      - type: "reveal_info"
+        info_type: "rumor"
+        content: "legendary_sword"
+      - type: "reveal_info"
+        info_type: "rumor"
+        content: "northern_dragon"
+    responses:
+      - text: "Tell me more about the tournament."
+        next: tournament_news
+      - text: "A dragon? Really?"
+        next: dragon_news
+      - text: "Thanks for the information."
+        next: farewell
+
+  tournament_news:
+    text: "The Grand Tournament of Eldoria! Knights, warriors, and adventurers from far and wide will compete for glory and prizes. The king himself will preside! It's going to be absolutely spectacular!"
+    responses:
+      - text: "That sounds exciting!"
+        next: farewell
+      - text: "Tell me about the dragon."
+        next: dragon_news
+
+  dragon_news:
+    text: "*whispers dramatically* A dragon! In the northern mountains! Some say it's guarding a hoard of treasure, others say it's just grumpy from lack of sleep. Either way, brave adventurers are heading that direction!"
+    responses:
+      - text: "I might check that out."
+        next: farewell
+      - text: "That's too dangerous for me."
+        next: farewell
+
+  farewell:
+    text: "*bows with a flourish* Farewell, friend! May your journey be filled with laughter and light! Return anytime for more jokes, riddles, or royal gossip!"
+    responses:
+      - text: "I'll be back!"
+        next: end
+
+  end:
+    text: ""
+    responses: []

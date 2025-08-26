@@ -1,0 +1,33 @@
+import { EventEmitter } from 'events';
+import { EventSystem } from '../../core/event';
+import { WorldManager } from '../world/world-manager';
+import { IPersistenceConfig, SaveType, ISaveInfo, ISaveValidationResult, IWorldSaveData, ISaveSystem } from './types';
+export declare class WorldSaveSystem extends EventEmitter implements ISaveSystem {
+    private config;
+    private eventSystem;
+    private logger;
+    private savePath;
+    private backupPath;
+    private worldManager;
+    constructor(config: IPersistenceConfig, eventSystem: EventSystem, worldManager: WorldManager, logger?: any);
+    save(data: IWorldSaveData, type: SaveType, description?: string): Promise<string>;
+    load(saveId: string): Promise<IWorldSaveData>;
+    saveWorldState(saveId: string, description?: string): Promise<string>;
+    loadWorldState(saveId: string): Promise<void>;
+    listSaves(): Promise<ISaveInfo[]>;
+    delete(saveId: string): Promise<boolean>;
+    validate(saveId: string): Promise<ISaveValidationResult>;
+    backup(saveId: string, reason: string): Promise<string>;
+    trackRoomModification(roomId: string, modifications: any): void;
+    trackItemModification(itemId: string, modifications: any): void;
+    trackNPCModification(npcId: string, modifications: any): void;
+    getModifiedElements(): any;
+    resetModificationTracking(): void;
+    getWorldStatistics(): any;
+    getStatistics(): any;
+    getStatus(): any;
+    private createSaveMetadata;
+    private calculateChecksum;
+    private validateSaveFile;
+    private createBackup;
+}

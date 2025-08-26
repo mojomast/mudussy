@@ -1,0 +1,48 @@
+import { EventEmitter } from 'events';
+import { EventSystem } from '../../core/event';
+import { IRoom, IExit, IItem, INPC, IWorldConfig } from './types';
+import { NPCManager } from './npc-manager';
+export declare class WorldManager extends EventEmitter {
+    private eventSystem;
+    private config;
+    private worldData;
+    private logger;
+    private npcManager;
+    private rooms;
+    private items;
+    private npcs;
+    private areas;
+    constructor(eventSystem: EventSystem, config: IWorldConfig, logger?: any);
+    private createEmptyWorld;
+    private mergeSectorData;
+    loadWorld(worldPath?: string): Promise<void>;
+    saveWorld(worldPath?: string): Promise<void>;
+    private buildLookupMaps;
+    getRoom(roomId: string): IRoom | undefined;
+    getAllRooms(): IRoom[];
+    getItem(itemId: string): IItem | undefined;
+    getAllItems(): IItem[];
+    getItemsInRoom(roomId: string): IItem[];
+    getNPC(npcId: string): INPC | undefined;
+    getAllNPCs(): INPC[];
+    getNPCsInRoom(roomId: string): INPC[];
+    getPlayersInRoom(roomId: string): string[];
+    movePlayer(playerId: string, fromRoomId: string, toRoomId: string): boolean;
+    addItemToRoom(itemId: string, roomId: string): boolean;
+    removeItemFromRoom(itemId: string, roomId: string): boolean;
+    createRoom(name: string, description: string, areaId?: string): IRoom;
+    createExit(fromRoomId: string, toRoomId: string, direction: string, description?: string): IExit | null;
+    findExit(roomId: string, directionOrVerb: string): IExit | null;
+    getRoomDescription(roomId: string): string;
+    validateWorld(): {
+        valid: boolean;
+        errors: string[];
+    };
+    getStatistics(): any;
+    getStartingRoomId(): string | null;
+    getNPCManager(): NPCManager;
+    private setupEventHandlers;
+    private handleRoomEntered;
+    private handleRoomLeft;
+    cleanup(): void;
+}

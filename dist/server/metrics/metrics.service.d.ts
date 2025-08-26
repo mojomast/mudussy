@@ -1,0 +1,50 @@
+import { OnModuleInit } from '@nestjs/common';
+import { Gauge, Counter, Histogram, Summary } from 'prom-client';
+import { ConfigService } from '../config/config.service';
+import { Logger } from '../logger/logger.service';
+export declare class MetricsService implements OnModuleInit {
+    private readonly configService;
+    private readonly logger;
+    private readonly httpRequestsTotal;
+    private readonly httpRequestDuration;
+    private readonly activeConnections;
+    private readonly activePlayers;
+    private readonly totalCommands;
+    private readonly commandDuration;
+    private readonly engineTickDuration;
+    private readonly memoryUsage;
+    private readonly cpuUsage;
+    private readonly uptime;
+    private readonly errorsTotal;
+    constructor(configService: ConfigService, logger: Logger);
+    onModuleInit(): void;
+    private startSystemMetricsCollection;
+    private updateSystemMetrics;
+    recordHttpRequest(method: string, path: string, statusCode: number, duration: number): void;
+    updateActiveConnections(count: number): void;
+    incrementActiveConnections(): void;
+    decrementActiveConnections(): void;
+    updateActivePlayers(count: number): void;
+    incrementActivePlayers(): void;
+    decrementActivePlayers(): void;
+    recordCommand(commandType: string, sessionId: string, duration?: number): void;
+    recordEngineTick(duration: number): void;
+    recordError(type: string, component: string): void;
+    createGauge(name: string, help: string, labelNames?: string[]): Gauge<string>;
+    createCounter(name: string, help: string, labelNames?: string[]): Counter<string>;
+    createHistogram(name: string, help: string, labelNames?: string[], buckets?: number[]): Histogram<string>;
+    createSummary(name: string, help: string, labelNames?: string[]): Summary<string>;
+    getMetrics(): Promise<string>;
+    getMetricsAsJSON(): Promise<Record<string, any>>;
+    getHealthMetrics(): Promise<{
+        activeConnections: number;
+        activePlayers: number;
+        totalCommands: number;
+        totalErrors: number;
+        uptime: number;
+        memoryUsage: {
+            heapUsed: number;
+            heapTotal: number;
+        };
+    }>;
+}

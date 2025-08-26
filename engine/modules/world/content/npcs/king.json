@@ -1,0 +1,41 @@
+{
+  "id": "king",
+  "name": "King Eldric the Wise",
+  "description": "A regal figure with a flowing robe and golden crown. His eyes show the weight of years of ruling, but his posture remains strong and commanding. He sits upon a throne adorned with intricate carvings.",
+  "shortDescription": "King Eldric",
+  "dialogueProvider": "canned-branching",
+  "behaviors": ["regal", "wise", "authoritative", "quest-giver"],
+  "stats": {
+    "level": 20,
+    "health": 200,
+    "strength": 12,
+    "defense": 15,
+    "agility": 8,
+    "leadership": 20
+  },
+  "flags": ["royal", "quest-giver", "human", "neutral"],
+  "spawnData": {
+    "npcId": "king",
+    "sectorId": "castle-sector",
+    "spawnRoomId": "eldoria:castle_great_hall",
+    "spawnConditions": [
+      {
+        "type": "player_enter",
+        "value": true
+      }
+    ],
+    "despawnConditions": [
+      {
+        "type": "no_players",
+        "delay": 60000
+      }
+    ]
+  },
+  "metadata": {
+    "version": "1.0.0",
+    "created": "2025-01-01T00:00:00.000Z",
+    "updated": "2025-01-01T00:00:00.000Z",
+    "author": "MUD Engine",
+    "description": "King of Eldoria, ruler and quest giver"
+  }
+}

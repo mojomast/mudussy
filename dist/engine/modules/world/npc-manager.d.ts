@@ -1,0 +1,45 @@
+import { EventEmitter } from 'events';
+import { EventSystem } from '../../core/event';
+import { INPC, INPCData } from './types';
+import { INPCTemplate } from './npc-templates';
+export declare class NPCManager extends EventEmitter {
+    private eventSystem;
+    private logger;
+    private npcDefinitions;
+    private activeNPCs;
+    private roomNPCs;
+    private npcTemplates;
+    private despawnTimers;
+    constructor(eventSystem: EventSystem, logger?: any);
+    loadNPC(filePath: string): Promise<void>;
+    loadNPCsFromDirectory(directoryPath: string): Promise<void>;
+    spawnNPC(npcId: string, roomId: string): INPC | null;
+    despawnNPC(npcId: string, delay?: number): boolean;
+    private handleRoomEnter;
+    private handleRoomLeave;
+    private getNPCsForRoom;
+    private checkSpawnConditions;
+    private checkDespawnConditions;
+    getActiveNPC(npcId: string): INPC | undefined;
+    getAllActiveNPCs(): INPC[];
+    getNPCsInRoom(roomId: string): INPC[];
+    getNPCDefinition(npcId: string): INPCData | undefined;
+    getAllNPCDefinitions(): INPCData[];
+    isNPCActive(npcId: string): boolean;
+    getStatistics(): any;
+    registerTemplate(templateId: string, template: INPCTemplate): void;
+    registerTemplates(templates: Record<string, INPCTemplate>): void;
+    getTemplate(templateId: string): INPCTemplate | undefined;
+    getAllTemplates(): INPCTemplate[];
+    createNPCFromTemplate(templateId: string, spawnRoomId: string, sectorId?: string, customizations?: Partial<INPCData>): INPC | null;
+    loadSampleNPCs(): void;
+    loadSampleNPCsByType(type: string): void;
+    spawnNPCsFromTemplates(templateConfigs: Array<{
+        templateId: string;
+        spawnRoomId: string;
+        sectorId?: string;
+        customizations?: Partial<INPCData>;
+    }>): INPC[];
+    getTemplateStatistics(): any;
+    cleanup(): void;
+}

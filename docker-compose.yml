@@ -1,0 +1,139 @@
+version: '3.8'
+
+services:
+  mud-engine:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: production
+    container_name: mud-engine
+    ports:
+      - "${MUD_PORT:-3000}:3000"
+      - "${MUD_NETWORK_PORT:-4000}:4000"
+    environment:
+      - NODE_ENV=production
+      - MUD_PORT=3000
+      - MUD_HOST=0.0.0.0
+      - MUD_NETWORK_HOST=0.0.0.0
+      - MUD_NETWORK_PORT=4000
+      - MUD_LOG_LEVEL=info
+      - MUD_LOG_FORMAT=json
+      - MUD_MAX_CONNECTIONS=100
+      - MUD_MAX_ENTITIES=10000
+      - MUD_SAVE_INTERVAL=300000
+      - MUD_WORLD_PATH=./engine/modules/world/content
+      - MUD_DEFAULT_ROOM_ID=tavern
+      - MUD_ENABLE_PLUGINS=true
+    volumes:
+      - ./logs:/app/logs
+      - ./data:/app/data
+      - ./engine/modules/world/content:/app/engine/modules/world/content
+    networks:
+      - mud-network
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:3000/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+    depends_on:
+      - redis
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"
+
+  redis:
+    image: redis:7-alpine
+    container_name: mud-engine-redis
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+      - ./docker/redis.conf:/etc/redis/redis.conf
+    networks:
+      - mud-network
+    restart: unless-stopped
+    command: redis-server /etc/redis/redis.conf
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  prometheus:
+    image: prom/prometheus:latest
+    container_name: mud-engine-prometheus
+    ports:
+      - "9090:9090"
+    volumes:
+      - ./docker/prometheus.yml:/etc/prometheus/prometheus.yml
+      - prometheus_data:/prometheus
+    networks:
+      - mud-network
+    restart: unless-stopped
+    command:
+      - '--config.file=/etc/prometheus/prometheus.yml'
+      - '--storage.tsdb.path=/prometheus'
+      - '--web.console.libraries=/etc/prometheus/console_libraries'
+      - '--web.console.templates=/etc/prometheus/consoles'
+      - '--storage.tsdb.retention.time=200h'
+      - '--web.enable-lifecycle'
+
+  grafana:
+    image: grafana/grafana:latest
+    container_name: mud-engine-grafana
+    ports:
+      - "3001:3000"
+    environment:
+      - GF_SECURITY_ADMIN_PASSWORD=admin
+      - GF_USERS_ALLOW_SIGN_UP=false
+    volumes:
+      - grafana_data:/var/lib/grafana
+      - ./docker/grafana/provisioning:/etc/grafana/provisioning
+      - ./docker/grafana/dashboards:/var/lib/grafana/dashboards
+    networks:
+      - mud-network
+    restart: unless-stopped
+    depends_on:
+      - prometheus
+
+  nginx:
+    image: nginx:alpine
+    container_name: mud-engine-nginx
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./docker/nginx/nginx.conf:/etc/nginx/nginx.conf
+      - ./docker/nginx/ssl:/etc/nginx/ssl
+      - nginx_logs:/var/log/nginx
+    networks:
+      - mud-network
+    restart: unless-stopped
+    depends_on:
+      - mud-engine
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+volumes:
+  redis_data:
+    driver: local
+  prometheus_data:
+    driver: local
+  grafana_data:
+    driver: local
+  nginx_logs:
+    driver: local
+
+networks:
+  mud-network:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 172.20.0.0/16

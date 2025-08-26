@@ -1,0 +1,42 @@
+{
+  "id": "apothecary",
+  "name": "Madam Elowen the Apothecary",
+  "description": "An elderly woman with silver hair and wise eyes. She wears robes embroidered with herbal motifs and has shelves filled with bottles, jars, and mysterious ingredients. The air smells of herbs and potions.",
+  "shortDescription": "Madam Elowen",
+  "dialogueProvider": "canned-branching",
+  "behaviors": ["wise", "merchant", "healer", "mysterious"],
+  "stats": {
+    "level": 8,
+    "health": 90,
+    "strength": 6,
+    "defense": 7,
+    "agility": 8,
+    "intelligence": 16,
+    "healing": 15
+  },
+  "flags": ["merchant", "healer", "human", "neutral"],
+  "spawnData": {
+    "npcId": "apothecary",
+    "sectorId": "town-sector",
+    "spawnRoomId": "eldoria:general_store",
+    "spawnConditions": [
+      {
+        "type": "player_enter",
+        "value": true
+      }
+    ],
+    "despawnConditions": [
+      {
+        "type": "no_players",
+        "delay": 60000
+      }
+    ]
+  },
+  "metadata": {
+    "version": "1.0.0",
+    "created": "2025-01-01T00:00:00.000Z",
+    "updated": "2025-01-01T00:00:00.000Z",
+    "author": "MUD Engine",
+    "description": "Apothecary selling potions, herbs, and healing items"
+  }
+}

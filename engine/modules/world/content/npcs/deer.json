@@ -1,0 +1,41 @@
+{
+  "id": "deer",
+  "name": "a graceful deer",
+  "description": "A beautiful deer with elegant antlers and soft brown fur. It moves with delicate grace, pausing occasionally to nibble at plants. Its large eyes watch you warily but without aggression.",
+  "shortDescription": "graceful deer",
+  "dialogueProvider": "canned-branching",
+  "behaviors": ["skittish", "gentle", "animal"],
+  "stats": {
+    "level": 2,
+    "health": 40,
+    "strength": 4,
+    "defense": 3,
+    "agility": 15,
+    "stealth": 12
+  },
+  "flags": ["animal", "neutral", "skittish"],
+  "spawnData": {
+    "npcId": "deer",
+    "sectorId": "forest-sector",
+    "spawnRoomId": "eldoria:forest_clearing",
+    "spawnConditions": [
+      {
+        "type": "player_enter",
+        "value": true
+      }
+    ],
+    "despawnConditions": [
+      {
+        "type": "no_players",
+        "delay": 30000
+      }
+    ]
+  },
+  "metadata": {
+    "version": "1.0.0",
+    "created": "2025-01-01T00:00:00.000Z",
+    "updated": "2025-01-01T00:00:00.000Z",
+    "author": "MUD Engine",
+    "description": "Peaceful forest deer that flees from danger"
+  }
+}

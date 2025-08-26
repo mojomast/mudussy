@@ -1,0 +1,41 @@
+{
+  "id": "farmer",
+  "name": "Old Man Harlan the Farmer",
+  "description": "A weathered farmer with calloused hands and sun-browned skin. He wears simple homespun clothes and carries the scent of earth and fresh produce. He's always willing to share stories of the land.",
+  "shortDescription": "Old Man Harlan",
+  "dialogueProvider": "canned-branching",
+  "behaviors": ["friendly", "wise", "storyteller", "hardworking"],
+  "stats": {
+    "level": 4,
+    "health": 70,
+    "strength": 10,
+    "defense": 8,
+    "agility": 6,
+    "farming": 12
+  },
+  "flags": ["civilian", "human", "neutral", "informant"],
+  "spawnData": {
+    "npcId": "farmer",
+    "sectorId": "town-sector",
+    "spawnRoomId": "eldoria:residential_area",
+    "spawnConditions": [
+      {
+        "type": "player_enter",
+        "value": true
+      }
+    ],
+    "despawnConditions": [
+      {
+        "type": "no_players",
+        "delay": 60000
+      }
+    ]
+  },
+  "metadata": {
+    "version": "1.0.0",
+    "created": "2025-01-01T00:00:00.000Z",
+    "updated": "2025-01-01T00:00:00.000Z",
+    "author": "MUD Engine",
+    "description": "Local farmer with knowledge of the surrounding lands"
+  }
+}

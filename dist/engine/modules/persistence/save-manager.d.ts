@@ -1,0 +1,31 @@
+import { EventEmitter } from 'events';
+import { EventSystem } from '../../core/event';
+import { IPersistenceConfig, SaveType, ISaveInfo, ISaveValidationResult } from './types';
+export declare class SaveManager extends EventEmitter {
+    private config;
+    private eventSystem;
+    private logger;
+    private playerSaveSystem;
+    private gameStateSaveSystem;
+    private worldSaveSystem;
+    private isInitialized;
+    constructor(config: IPersistenceConfig, eventSystem: EventSystem, logger?: any);
+    private initializeSaveSystems;
+    private ensureDirectories;
+    saveFullGame(description?: string): Promise<string>;
+    loadFullGame(saveId: string): Promise<void>;
+    savePlayers(description?: string): Promise<string>;
+    loadPlayers(saveId: string): Promise<void>;
+    saveGameState(description?: string): Promise<string>;
+    loadGameState(saveId: string): Promise<void>;
+    saveWorldState(description?: string): Promise<string>;
+    loadWorldState(saveId: string): Promise<void>;
+    listSaves(type?: SaveType): Promise<ISaveInfo[]>;
+    deleteSave(saveId: string): Promise<boolean>;
+    validateSave(saveId: string): Promise<ISaveValidationResult>;
+    backupSave(saveId: string, reason: string): Promise<string>;
+    getSaveStatistics(): Promise<any>;
+    cleanupOldBackups(): Promise<number>;
+    private createSaveManifest;
+    getStatus(): any;
+}

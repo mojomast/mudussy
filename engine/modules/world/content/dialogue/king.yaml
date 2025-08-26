@@ -1,0 +1,202 @@
+version: "1.0"
+npc: king
+dialogue:
+  greeting:
+    text: "Greetings, noble traveler. I am King Eldric the Wise, ruler of Eldoria. What brings you before the throne?"
+    responses:
+      - text: "I seek adventure and glory!"
+        next: adventure
+      - text: "I bring news from the realm."
+        next: news
+      - text: "I wish to serve the kingdom."
+        next: service
+        conditions:
+          - type: "reputation"
+            faction: "kingdom"
+            min_value: 0
+      - text: "I have completed your quest!"
+        next: quest_complete
+        conditions:
+          - type: "quest_status"
+            quest_id: "royal_quest"
+            status: "completed"
+      - text: "Just passing through, Your Majesty."
+        next: farewell
+
+  adventure:
+    text: "Ah, another brave soul seeking fortune! The realm has many challenges - bandits in the forest, ancient ruins in the mountains, and dark creatures in the caves. Which path calls to you?"
+    responses:
+      - text: "Tell me about the forest."
+        next: forest_quest
+        conditions:
+          - type: "player_level"
+            min_level: 1
+          - type: "reputation"
+            faction: "kingdom"
+            min_value: -10
+      - text: "What of the mountains?"
+        next: mountain_quest
+        conditions:
+          - type: "player_level"
+            min_level: 3
+          - type: "item_owned"
+            item_id: "rope"
+      - text: "The caves sound dangerous."
+        next: cave_quest
+        conditions:
+          - type: "player_level"
+            min_level: 5
+          - type: "reputation"
+            faction: "kingdom"
+            min_value: 10
+          - type: "item_owned"
+            item_id: "lantern"
+      - text: "I must consider my options."
+        next: farewell
+
+  forest_quest:
+    text: "The forest holds many secrets. A powerful druid lives in the clearing, and wolves prowl the deep woods. There are rumors of a cursed glade that needs cleansing. Will you investigate?"
+    responses:
+      - text: "I accept this quest!"
+        next: quest_accepted
+      - text: "That sounds too dangerous."
+        next: farewell
+
+  mountain_quest:
+    text: "The mountains are treacherous but rewarding. Ancient ruins hold treasures, but also guardians. A cave bear has been terrorizing travelers on the mountain path. Will you deal with this threat?"
+    responses:
+      - text: "I will hunt the bear!"
+        next: quest_accepted
+      - text: "Perhaps another time."
+        next: farewell
+
+  cave_quest:
+    text: "The mountain caves are dark and filled with unknown dangers. Strange sounds echo from within, and few who enter return. But great treasures await the brave. Do you dare enter?"
+    responses:
+      - text: "I will explore the caves!"
+        next: quest_accepted
+      - text: "That darkness is too much for me."
+        next: farewell
+
+  quest_accepted:
+    text: "Excellent! Return to me when you have completed your task, and you shall be richly rewarded. May the light guide your path, brave adventurer."
+    triggers:
+      - type: "start_quest"
+        quest_id: "royal_quest"
+        parameters:
+          quest_type: "active"
+          giver: "king"
+    responses:
+      - text: "I won't let you down, Your Majesty."
+        next: end
+
+  news:
+    text: "What news do you bring from the realm? Speak freely, traveler."
+    responses:
+      - text: "The town is peaceful and prosperous."
+        next: good_news
+      - text: "There are troubles in the forest."
+        next: forest_trouble
+      - text: "Bandits have been seen on the roads."
+        next: bandit_news
+      - text: "Just casual conversation."
+        next: farewell
+
+  good_news:
+    text: "That gladdens my heart to hear. A peaceful realm means a prosperous one. You have done well to bring such tidings."
+    triggers:
+      - type: "give_item"
+        item_id: "gold_coin"
+        quantity: 10
+      - type: "change_reputation"
+        faction: "kingdom"
+        amount: 5
+    responses:
+      - text: "Thank you, Your Majesty."
+        next: end
+
+  forest_trouble:
+    text: "The forest troubles concern me. I will send additional guards to patrol the area. Thank you for this information."
+    responses:
+      - text: "It was my duty to inform you."
+        next: end
+
+  bandit_news:
+    text: "Bandits on the roads? This cannot stand. I will dispatch soldiers immediately. You have served the kingdom well today."
+    triggers:
+      - type: "give_item"
+        item_id: "gold_coin"
+        quantity: 25
+      - type: "change_reputation"
+        faction: "kingdom"
+        amount: 10
+      - type: "spawn_guards"
+        location: "main_roads"
+        count: 3
+    responses:
+      - text: "I am glad to help."
+        next: end
+
+  service:
+    text: "You wish to serve the kingdom? There are many ways to do so. Will you join the guard, assist the townsfolk, or seek out threats to the realm?"
+    responses:
+      - text: "I will join the guard."
+        next: guard_service
+      - text: "I will help the townsfolk."
+        next: town_service
+      - text: "I will hunt threats to the realm."
+        next: adventurer_service
+      - text: "Let me think about it."
+        next: farewell
+
+  guard_service:
+    text: "The royal guard always welcomes skilled warriors. Speak with Captain Valeria in the courtyard - she will assess your worthiness."
+    triggers:
+      - type: "unlock_location"
+        location: "castle_courtyard"
+      - type: "change_reputation"
+        faction: "guard"
+        amount: 5
+    responses:
+      - text: "I will seek her out immediately."
+        next: end
+
+  town_service:
+    text: "The people of the town need strong protectors. Speak with the town clerk in the town hall for opportunities to help."
+    responses:
+      - text: "I will help the people."
+        next: end
+
+  adventurer_service:
+    text: "Then you are truly a hero at heart! Seek out quests and help those in need. Return to me with tales of your victories."
+    responses:
+      - text: "I will make you proud, Your Majesty."
+        next: end
+
+  quest_complete:
+    text: "You have returned victorious! Tell me of your adventures and claim your reward."
+    triggers:
+      - type: "complete_quest"
+        quest_id: "royal_quest"
+      - type: "give_item"
+        item_id: "gold_coin"
+        quantity: 50
+      - type: "change_reputation"
+        faction: "kingdom"
+        amount: 25
+      - type: "give_item"
+        item_id: "royal_signet"
+        quantity: 1
+    responses:
+      - text: "It was my honor to serve!"
+        next: end
+
+  farewell:
+    text: "Safe travels, traveler. May you find what you seek in these lands."
+    responses:
+      - text: "Thank you, Your Majesty."
+        next: end
+
+  end:
+    text: ""
+    responses: []

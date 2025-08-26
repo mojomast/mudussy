@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MUD Admin Panel</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'mud-green': '#0f0',
+                        'mud-black': '#000',
+                        'mud-dark': '#001100',
+                        'mud-light': '#4f4'
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="bg-mud-black text-mud-green font-mono">
+    <div id="root"></div>
+    <script src="https://unpkg.com/react@18/umd/react.development.js"></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <script type="text/babel" data-type="module" src="WorldVisualization.js"></script>
+    <script type="text/babel" data-type="module" src="Components.js"></script>
+    <script type="text/babel" data-type="module" src="App.js"></script>
+</body>
+</html>

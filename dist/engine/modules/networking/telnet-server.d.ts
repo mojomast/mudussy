@@ -1,0 +1,37 @@
+import { EventEmitter } from 'events';
+import { EventSystem } from '../../core/event';
+import { SessionManager } from './session';
+import { CommandParser } from './command-parser';
+import { PlayerManager } from '../persistence/player-manager';
+import { WorldManager } from '../world/world-manager';
+import { INetworkConfig, IMessage } from './types';
+export declare class TelnetServer extends EventEmitter {
+    private server?;
+    private sessionManager;
+    private commandParser;
+    private config;
+    private eventSystem;
+    private logger;
+    private playerManager?;
+    private worldManager?;
+    private isRunning;
+    constructor(eventSystem: EventSystem, config: INetworkConfig, playerManager?: PlayerManager, logger?: any, worldManager?: WorldManager);
+    start(): Promise<void>;
+    stop(): Promise<void>;
+    private handleConnection;
+    private sendWelcomeMessage;
+    private setupEventHandlers;
+    private usernameExists;
+    private setupSessionEventHandlers;
+    private startAuthenticationProcess;
+    private authenticateSession;
+    private sendPrompt;
+    sendMessage(sessionId: string, message: IMessage): boolean;
+    broadcastMessage(message: IMessage, excludeSessionId?: string): void;
+    getStatistics(): any;
+    registerCommand(handler: any): void;
+    unregisterCommand(command: string): boolean;
+    getSessionManager(): SessionManager;
+    getCommandParser(): CommandParser;
+    getIsRunning(): boolean;
+}

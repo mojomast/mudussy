@@ -1,0 +1,33 @@
+{
+  "sectors": [
+    "sectors/town.json",
+    "sectors/forest.json",
+    "sectors/mountain.json",
+    "sectors/castle.json"
+  ],
+  "npcFiles": [
+    "npcs/gate-guard.json",
+    "npcs/blacksmith.json",
+    "npcs/king.json",
+    "npcs/jester.json",
+    "npcs/apothecary.json",
+    "npcs/jeweler.json",
+    "npcs/castle-captain.json",
+    "npcs/town-patrol.json",
+    "npcs/farmer.json",
+    "npcs/baker.json",
+    "npcs/deer.json",
+    "npcs/raven.json"
+  ],
+  "areas": [],
+  "rooms": [],
+  "items": [],
+  "npcs": [],
+  "metadata": {
+    "version": "1.0.0",
+    "created": "2025-01-01T00:00:00.000Z",
+    "updated": "2025-01-01T00:00:00.000Z",
+    "author": "MUD Engine",
+    "description": "Modular world with sectors and individual NPC files for easier maintenance"
+  }
+}

@@ -1,0 +1,539 @@
+{
+  "id": "town-sector",
+  "name": "Town of Eldoria",
+  "description": "The medieval town of Eldoria with its bustling streets, shops, and tavern",
+  "rooms": [
+    {
+      "id": "eldoria:town_gate",
+      "name": "Town Gate",
+      "description": "Massive stone gates mark the entrance to the medieval town of Eldoria. Guards stand watch from towers above, checking travelers who come and go. The main street leads north into town.",
+      "area": "town-sector",
+      "exits": [
+        {
+          "id": "town-gate-to-main-street",
+          "direction": "north",
+          "toRoomId": "eldoria:main_street",
+          "description": "The main street leading into town",
+          "verbs": ["north", "gate"],
+          "flags": []
+        }
+      ],
+      "items": [],
+      "npcs": [],
+      "players": [],
+      "flags": ["outdoor", "entrance"],
+      "created": "2025-01-01T00:00:00.000Z",
+      "updated": "2025-01-01T00:00:00.000Z"
+    },
+    {
+      "id": "eldoria:main_street",
+      "name": "Main Street",
+      "description": "A cobblestone street lined with shops and houses. The town square is visible to the north, and the town gate lies to the south. Residential areas branch off to the east.",
+      "area": "town-sector",
+      "exits": [
+        {
+          "id": "main-street-to-town-gate",
+          "direction": "south",
+          "toRoomId": "eldoria:town_gate",
+          "description": "Back to the town gate",
+          "verbs": ["south", "gate"],
+          "flags": []
+        },
+        {
+          "id": "main-street-to-town-square",
+          "direction": "north",
+          "toRoomId": "eldoria:town_square",
+          "description": "The town square",
+          "verbs": ["north", "square"],
+          "flags": []
+        },
+        {
+          "id": "main-street-to-residential",
+          "direction": "east",
+          "toRoomId": "eldoria:residential_area",
+          "description": "Residential district",
+          "verbs": ["east", "residential"],
+          "flags": []
+        }
+      ],
+      "items": [],
+      "npcs": [],
+      "players": [],
+      "flags": ["outdoor", "safe"],
+      "created": "2025-01-01T00:00:00.000Z",
+      "updated": "2025-01-01T00:00:00.000Z"
+    },
+    {
+      "id": "eldoria:town_square",
+      "name": "Town Square",
+      "description": "A bustling town square with a large fountain in the center. Shops surround the area with the tavern to the north, blacksmith to the east, and general store to the west. The main street leads south.",
+      "area": "town-sector",
+      "exits": [
+        {
+          "id": "town-square-to-main-street",
+          "direction": "south",
+          "toRoomId": "eldoria:main_street",
+          "description": "Back to main street",
+          "verbs": ["south", "street"],
+          "flags": []
+        },
+        {
+          "id": "town-square-to-tavern",
+          "direction": "north",
+          "toRoomId": "eldoria:tavern",
+          "description": "The Prancing Pony Tavern",
+          "verbs": ["north", "tavern"],
+          "flags": []
+        },
+        {
+          "id": "town-square-to-blacksmith",
+          "direction": "east",
+          "toRoomId": "eldoria:blacksmith",
+          "description": "The blacksmith shop",
+          "verbs": ["east", "blacksmith"],
+          "flags": []
+        },
+        {
+          "id": "town-square-to-general-store",
+          "direction": "west",
+          "toRoomId": "eldoria:general_store",
+          "description": "The general store",
+          "verbs": ["west", "store"],
+          "flags": []
+        },
+        {
+          "id": "town-square-to-town-hall",
+          "direction": "northeast",
+          "toRoomId": "eldoria:town_hall",
+          "description": "The town hall",
+          "verbs": ["northeast", "hall"],
+          "flags": []
+        }
+      ],
+      "items": ["town_fountain"],
+      "npcs": [],
+      "players": [],
+      "flags": ["outdoor", "safe", "social"],
+      "created": "2025-01-01T00:00:00.000Z",
+      "updated": "2025-01-01T00:00:00.000Z"
+    },
+    {
+      "id": "eldoria:tavern",
+      "name": "The Prancing Pony Tavern",
+      "description": "A cozy tavern with wooden tables and a crackling fireplace. The air smells of ale and pipe smoke. Adventurers from all over gather here to share stories and find work. The town square is south, an inn is east, and stairs lead up.",
+      "area": "town-sector",
+      "exits": [
+        {
+          "id": "tavern-to-town-square",
+          "direction": "south",
+          "toRoomId": "eldoria:town_square",
+          "description": "Out to the town square",
+          "verbs": ["south", "out"],
+          "flags": []
+        },
+        {
+          "id": "tavern-to-inn",
+          "direction": "east",
+          "toRoomId": "eldoria:inn",
+          "description": "The Golden Dragon Inn",
+          "verbs": ["east", "inn"],
+          "flags": []
+        },
+        {
+          "id": "tavern-to-upstairs",
+          "direction": "up",
+          "toRoomId": "eldoria:tavern_upstairs",
+          "description": "Up the stairs",
+          "verbs": ["up", "stairs"],
+          "flags": []
+        }
+      ],
+      "items": ["wooden_cup", "pipe"],
+      "npcs": [],
+      "players": [],
+      "flags": ["indoor", "safe", "social"],
+      "created": "2025-01-01T00:00:00.000Z",
+      "updated": "2025-01-01T00:00:00.000Z"
+    },
+    {
+      "id": "eldoria:tavern_upstairs",
+      "name": "Tavern Upstairs",
+      "description": "A quiet upstairs room with several beds for travelers. The wooden floor creaks underfoot, and the sounds of the tavern below filter up through the floorboards.",
+      "area": "town-sector",
+      "exits": [
+        {
+          "id": "tavern-upstairs-to-tavern",
+          "direction": "down",
+          "toRoomId": "eldoria:tavern",
+          "description": "Down to the tavern",
+          "verbs": ["down", "stairs"],
+          "flags": []
+        }
+      ],
+      "items": ["bed"],
+      "npcs": [],
+      "players": [],
+      "flags": ["indoor", "safe"],
+      "created": "2025-01-01T00:00:00.000Z",
+      "updated": "2025-01-01T00:00:00.000Z"
+    },
+    {
+      "id": "eldoria:inn",
+      "name": "The Golden Dragon Inn",
+      "description": "A comfortable inn with clean rooms and a dining area. The tavern is to the west, offering both food and lodging for travelers.",
+      "area": "town-sector",
+      "exits": [
+        {
+          "id": "inn-to-tavern",
+          "direction": "west",
+          "toRoomId": "eldoria:tavern",
+          "description": "Back to the tavern",
+          "verbs": ["west", "tavern"],
+          "flags": []
+        }
+      ],
+      "items": ["key"],
+      "npcs": [],
+      "players": [],
+      "flags": ["indoor", "safe"],
+      "created": "2025-01-01T00:00:00.000Z",
+      "updated": "2025-01-01T00:00:00.000Z"
+    },
+    {
+      "id": "eldoria:blacksmith",
+      "name": "The Forge",
+      "description": "A blacksmith shop with tools and weapons hanging on the walls. The sound of hammering echoes as the blacksmith works at the anvil. The town square is west.",
+      "area": "town-sector",
+      "exits": [
+        {
+          "id": "blacksmith-to-town-square",
+          "direction": "west",
+          "toRoomId": "eldoria:town_square",
+          "description": "Back to town square",
+          "verbs": ["west", "square"],
+          "flags": []
+        }
+      ],
+      "items": ["hammer", "sword"],
+      "npcs": [],
+      "players": [],
+      "flags": ["indoor", "safe"],
+      "created": "2025-01-01T00:00:00.000Z",
+      "updated": "2025-01-01T00:00:00.000Z"
+    },
+    {
+      "id": "eldoria:general_store",
+      "name": "General Store",
+      "description": "A well-stocked store selling various goods and supplies. Shelves are filled with everything from rope to lanterns. The town square is east.",
+      "area": "town-sector",
+      "exits": [
+        {
+          "id": "general-store-to-town-square",
+          "direction": "east",
+          "toRoomId": "eldoria:town_square",
+          "description": "Back to town square",
+          "verbs": ["east", "square"],
+          "flags": []
+        }
+      ],
+      "items": ["rope", "lantern"],
+      "npcs": [],
+      "players": [],
+      "flags": ["indoor", "safe"],
+      "created": "2025-01-01T00:00:00.000Z",
+      "updated": "2025-01-01T00:00:00.000Z"
+    },
+    {
+      "id": "eldoria:town_hall",
+      "name": "Town Hall",
+      "description": "The center of local government. Notices and announcements are posted on bulletin boards, and officials conduct town business here. The town square is southwest.",
+      "area": "town-sector",
+      "exits": [
+        {
+          "id": "town-hall-to-town-square",
+          "direction": "southwest",
+          "toRoomId": "eldoria:town_square",
+          "description": "Back to town square",
+          "verbs": ["southwest", "square"],
+          "flags": []
+        }
+      ],
+      "items": ["notice"],
+      "npcs": [],
+      "players": [],
+      "flags": ["indoor", "safe", "official"],
+      "created": "2025-01-01T00:00:00.000Z",
+      "updated": "2025-01-01T00:00:00.000Z"
+    },
+    {
+      "id": "eldoria:residential_area",
+      "name": "Residential District",
+      "description": "Quiet residential streets with houses and gardens. The main street is west, and a forest path leads north into the wilderness.",
+      "area": "town-sector",
+      "exits": [
+        {
+          "id": "residential-to-main-street",
+          "direction": "west",
+          "toRoomId": "eldoria:main_street",
+          "description": "Back to main street",
+          "verbs": ["west", "street"],
+          "flags": []
+        },
+        {
+          "id": "residential-to-forest-path",
+          "direction": "north",
+          "toRoomId": "eldoria:forest_path",
+          "description": "Forest path",
+          "verbs": ["north", "forest"],
+          "flags": []
+        }
+      ],
+      "items": [],
+      "npcs": [],
+      "players": [],
+      "flags": ["outdoor", "safe"],
+      "created": "2025-01-01T00:00:00.000Z",
+      "updated": "2025-01-01T00:00:00.000Z"
+    }
+  ],
+  "items": [
+    {
+      "id": "wooden_cup",
+      "name": "a wooden cup",
+      "description": "A simple wooden cup, perfect for holding ale or other beverages",
+      "shortDescription": "wooden cup",
+      "type": "misc",
+      "portable": true,
+      "container": true,
+      "maxItems": 1,
+      "containedItems": [],
+      "stats": {},
+      "flags": ["drinkable"],
+      "created": "2025-01-01T00:00:00.000Z",
+      "updated": "2025-01-01T00:00:00.000Z"
+    },
+    {
+      "id": "pipe",
+      "name": "a wooden pipe",
+      "description": "A well-worn wooden pipe with a rich, smoky aroma",
+      "shortDescription": "wooden pipe",
+      "type": "misc",
+      "portable": true,
+      "container": false,
+      "stats": {},
+      "flags": ["smokable"],
+      "created": "2025-01-01T00:00:00.000Z",
+      "updated": "2025-01-01T00:00:00.000Z"
+    },
+    {
+      "id": "town_fountain",
+      "name": "a central fountain",
+      "description": "A large stone fountain with water continuously flowing",
+      "shortDescription": "fountain",
+      "type": "misc",
+      "portable": false,
+      "container": false,
+      "stats": {},
+      "flags": ["water", "decorative"],
+      "created": "2025-01-01T00:00:00.000Z",
+      "updated": "2025-01-01T00:00:00.000Z"
+    },
+    {
+      "id": "bed",
+      "name": "a comfortable bed",
+      "description": "A soft bed with clean linens",
+      "shortDescription": "bed",
+      "type": "furniture",
+      "portable": false,
+      "container": false,
+      "stats": {},
+      "flags": ["sleepable"],
+      "created": "2025-01-01T00:00:00.000Z",
+      "updated": "2025-01-01T00:00:00.000Z"
+    },
+    {
+      "id": "key",
+      "name": "a brass key",
+      "description": "A small brass key, perhaps for a room",
+      "shortDescription": "key",
+      "type": "key",
+      "portable": true,
+      "container": false,
+      "stats": {},
+      "flags": ["key"],
+      "created": "2025-01-01T00:00:00.000Z",
+      "updated": "2025-01-01T00:00:00.000Z"
+    },
+    {
+      "id": "hammer",
+      "name": "a blacksmith's hammer",
+      "description": "A heavy hammer used for forging metal",
+      "shortDescription": "hammer",
+      "type": "weapon",
+      "portable": true,
+      "container": false,
+      "stats": { "damage": 3 },
+      "flags": ["tool"],
+      "created": "2025-01-01T00:00:00.000Z",
+      "updated": "2025-01-01T00:00:00.000Z"
+    },
+    {
+      "id": "sword",
+      "name": "a steel sword",
+      "description": "A well-balanced steel sword with a sharp blade",
+      "shortDescription": "sword",
+      "type": "weapon",
+      "portable": true,
+      "container": false,
+      "stats": { "damage": 5 },
+      "flags": ["weapon"],
+      "created": "2025-01-01T00:00:00.000Z",
+      "updated": "2025-01-01T00:00:00.000Z"
+    },
+    {
+      "id": "rope",
+      "name": "a coil of rope",
+      "description": "A sturdy rope, useful for climbing or binding",
+      "shortDescription": "rope",
+      "type": "tool",
+      "portable": true,
+      "container": false,
+      "stats": {},
+      "flags": ["climbable"],
+      "created": "2025-01-01T00:00:00.000Z",
+      "updated": "2025-01-01T00:00:00.000Z"
+    },
+    {
+      "id": "lantern",
+      "name": "a brass lantern",
+      "description": "A brass lantern that provides light when lit",
+      "shortDescription": "lantern",
+      "type": "light",
+      "portable": true,
+      "container": false,
+      "stats": {},
+      "flags": ["light"],
+      "created": "2025-01-01T00:00:00.000Z",
+      "updated": "2025-01-01T00:00:00.000Z"
+    },
+    {
+      "id": "notice",
+      "name": "a posted notice",
+      "description": "An official notice posted on the bulletin board",
+      "shortDescription": "notice",
+      "type": "document",
+      "portable": true,
+      "container": false,
+      "stats": {},
+      "flags": ["readable"],
+      "created": "2025-01-01T00:00:00.000Z",
+      "updated": "2025-01-01T00:00:00.000Z"
+    }
+  ],
+  "npcs": [
+    {
+      "id": "barkeep",
+      "name": "the barkeep",
+      "description": "A jolly man with a thick beard, wiping glasses behind the bar",
+      "shortDescription": "barkeep",
+      "roomId": "tavern",
+      "dialogueProvider": "canned-branching",
+      "behaviors": ["friendly", "merchant"],
+      "stats": { "level": 5, "health": 100 },
+      "flags": ["shopkeeper"],
+      "created": "2025-01-01T00:00:00.000Z",
+      "updated": "2025-01-01T00:00:00.000Z"
+    },
+    {
+      "id": "gate_guard",
+      "name": "a gate guard",
+      "description": "A vigilant guard watching the town entrance",
+      "shortDescription": "gate guard",
+      "roomId": "town_gate",
+      "dialogueProvider": "canned-branching",
+      "behaviors": ["protective", "helpful"],
+      "stats": { "level": 8, "health": 120 },
+      "flags": ["guard"],
+      "created": "2025-01-01T00:00:00.000Z",
+      "updated": "2025-01-01T00:00:00.000Z"
+    },
+    {
+      "id": "town_crier",
+      "name": "the town crier",
+      "description": "A man calling out news and announcements",
+      "shortDescription": "town crier",
+      "roomId": "town_square",
+      "dialogueProvider": "canned-branching",
+      "behaviors": ["informative", "talkative"],
+      "stats": { "level": 3, "health": 75 },
+      "flags": ["informant"],
+      "created": "2025-01-01T00:00:00.000Z",
+      "updated": "2025-01-01T00:00:00.000Z"
+    },
+    {
+      "id": "innkeeper",
+      "name": "the innkeeper",
+      "description": "A friendly innkeeper managing the Golden Dragon Inn",
+      "shortDescription": "innkeeper",
+      "roomId": "inn",
+      "dialogueProvider": "canned-branching",
+      "behaviors": ["friendly", "merchant"],
+      "stats": { "level": 4, "health": 90 },
+      "flags": ["shopkeeper"],
+      "created": "2025-01-01T00:00:00.000Z",
+      "updated": "2025-01-01T00:00:00.000Z"
+    },
+    {
+      "id": "blacksmith",
+      "name": "the blacksmith",
+      "description": "A strong blacksmith hammering away at his forge",
+      "shortDescription": "blacksmith",
+      "roomId": "blacksmith",
+      "dialogueProvider": "canned-branching",
+      "behaviors": ["gruff", "merchant"],
+      "stats": { "level": 6, "health": 110 },
+      "flags": ["shopkeeper", "craftsman"],
+      "created": "2025-01-01T00:00:00.000Z",
+      "updated": "2025-01-01T00:00:00.000Z"
+    },
+    {
+      "id": "shopkeeper",
+      "name": "the shopkeeper",
+      "description": "A cheerful shopkeeper tending to customers",
+      "shortDescription": "shopkeeper",
+      "roomId": "general_store",
+      "dialogueProvider": "canned-branching",
+      "behaviors": ["friendly", "merchant"],
+      "stats": { "level": 4, "health": 85 },
+      "flags": ["shopkeeper"],
+      "created": "2025-01-01T00:00:00.000Z",
+      "updated": "2025-01-01T00:00:00.000Z"
+    },
+    {
+      "id": "clerk",
+      "name": "the town clerk",
+      "description": "A bespectacled clerk handling official business",
+      "shortDescription": "town clerk",
+      "roomId": "town_hall",
+      "dialogueProvider": "canned-branching",
+      "behaviors": ["helpful", "bureaucratic"],
+      "stats": { "level": 3, "health": 70 },
+      "flags": ["official"],
+      "created": "2025-01-01T00:00:00.000Z",
+      "updated": "2025-01-01T00:00:00.000Z"
+    },
+    {
+      "id": "villager",
+      "name": "a villager",
+      "description": "A local resident going about their daily business",
+      "shortDescription": "villager",
+      "roomId": "residential_area",
+      "dialogueProvider": "canned-branching",
+      "behaviors": ["friendly", "talkative"],
+      "stats": { "level": 2, "health": 60 },
+      "flags": ["civilian"],
+      "created": "2025-01-01T00:00:00.000Z",
+      "updated": "2025-01-01T00:00:00.000Z"
+    }
+  ]
+}

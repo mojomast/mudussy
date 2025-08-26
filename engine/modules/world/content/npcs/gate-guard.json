@@ -1,0 +1,40 @@
+{
+  "id": "gate_guard",
+  "name": "a vigilant gate guard",
+  "description": "A vigilant guard watching the town entrance. He stands tall in his armor, carefully checking everyone who enters or leaves the town.",
+  "shortDescription": "gate guard",
+  "dialogueProvider": "canned-branching",
+  "behaviors": ["protective", "helpful", "alert"],
+  "stats": {
+    "level": 8,
+    "health": 120,
+    "strength": 14,
+    "defense": 12,
+    "agility": 10
+  },
+  "flags": ["guard", "human", "lawful", "town-aligned"],
+  "spawnData": {
+    "npcId": "gate_guard",
+    "sectorId": "town-sector",
+    "spawnRoomId": "eldoria:town_gate",
+    "spawnConditions": [
+      {
+        "type": "player_enter",
+        "value": true
+      }
+    ],
+    "despawnConditions": [
+      {
+        "type": "no_players",
+        "delay": 30000
+      }
+    ]
+  },
+  "metadata": {
+    "version": "1.0.0",
+    "created": "2025-01-01T00:00:00.000Z",
+    "updated": "2025-01-01T00:00:00.000Z",
+    "author": "MUD Engine",
+    "description": "Town gate guard NPC with protective behaviors"
+  }
+}

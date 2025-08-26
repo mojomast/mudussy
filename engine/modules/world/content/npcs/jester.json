@@ -1,0 +1,41 @@
+{
+  "id": "jester",
+  "name": "Jolly the Jester",
+  "description": "A colorful jester with bells on his hat and multicolored clothes. His face is painted white with exaggerated features, and he moves with exaggerated, comical gestures. He's always ready with a joke or riddle.",
+  "shortDescription": "Jolly the Jester",
+  "dialogueProvider": "canned-branching",
+  "behaviors": ["humorous", "entertaining", "trickster", "friendly"],
+  "stats": {
+    "level": 5,
+    "health": 80,
+    "strength": 6,
+    "defense": 5,
+    "agility": 12,
+    "charisma": 15
+  },
+  "flags": ["entertainer", "human", "neutral", "merchant"],
+  "spawnData": {
+    "npcId": "jester",
+    "sectorId": "town-sector",
+    "spawnRoomId": "eldoria:town_square",
+    "spawnConditions": [
+      {
+        "type": "player_enter",
+        "value": true
+      }
+    ],
+    "despawnConditions": [
+      {
+        "type": "no_players",
+        "delay": 60000
+      }
+    ]
+  },
+  "metadata": {
+    "version": "1.0.0",
+    "created": "2025-01-01T00:00:00.000Z",
+    "updated": "2025-01-01T00:00:00.000Z",
+    "author": "MUD Engine",
+    "description": "Court jester providing entertainment and light-hearted interaction"
+  }
+}
