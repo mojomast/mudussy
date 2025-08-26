@@ -210,32 +210,7 @@ export class TelnetServer extends EventEmitter {
       }
     });
 
-    // Handle player messages (say command)
-    this.eventSystem.on(EventTypes.PLAYER_MESSAGE, (event) => {
-      if (!event.data) return;
-
-      const { message, type } = event.data;
-      const senderId = event.source;
-
-      // Get sender session to get username
-      const senderSession = this.sessionManager.getSession(senderId);
-      const username = senderSession?.username || 'Unknown';
-
-      // Format message for broadcasting
-      let formattedMessage: string;
-      if (type === 'say') {
-        formattedMessage = ColorScheme.user(`${username}`, message);
-      } else {
-        formattedMessage = `${username}: ${message}`;
-      }
-
-      // Broadcast to all connected sessions except sender
-      this.sessionManager.broadcastMessage(
-        formattedMessage,
-        'user',
-        senderId
-      );
-    });
+  // PLAYER_MESSAGE is handled by EngineService for correct room/global routing.
 
     // Handle player joined events
     this.eventSystem.on(EventTypes.PLAYER_JOINED, (event) => {

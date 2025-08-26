@@ -80,7 +80,7 @@ let WebClientService = class WebClientService {
             }
             player.currentRoomId = exit.toRoomId;
             this.emitToWeb(webClientId, { type: 'info', content: `You move ${direction}.` });
-            const desc = this.worldManager.getRoomDescription(exit.toRoomId);
+            const desc = this.worldManager.getRoomDescription(exit.toRoomId, sessionId);
             this.emitToWeb(webClientId, { type: 'info', content: this.stripAnsi(desc) });
         });
         this.eventSystem.on(types_1.NetworkEventTypes.SESSION_AUTHENTICATED, (event) => {
@@ -89,6 +89,42 @@ let WebClientService = class WebClientService {
             if (webClientId) {
                 const username = (event.data && (event.data.username || event.data.session?.username)) || 'player';
                 this.emitToWeb(webClientId, { type: 'system', content: `Authenticated as ${username}` });
+            }
+        });
+        this.eventSystem.on('world.room.entered', (event) => {
+            if (!event.data)
+                return;
+            const enteringId = String(event.target || event.source);
+            const { toRoomId } = event.data;
+            const entering = this.playerManager.getPlayerBySessionId(enteringId);
+            if (!entering || !toRoomId)
+                return;
+            const msg = `${entering.username} has entered the room.`;
+            for (const [webId, engineId] of this.webSessions) {
+                if (engineId === enteringId)
+                    continue;
+                const p = this.playerManager.getPlayerBySessionId(engineId);
+                if (p && p.currentRoomId === toRoomId) {
+                    this.emitToWeb(webId, { type: 'info', content: msg });
+                }
+            }
+        });
+        this.eventSystem.on('world.room.left', (event) => {
+            if (!event.data)
+                return;
+            const leavingId = String(event.target || event.source);
+            const { fromRoomId } = event.data;
+            const leaving = this.playerManager.getPlayerBySessionId(leavingId);
+            if (!leaving || !fromRoomId)
+                return;
+            const msg = `${leaving.username} has left the room.`;
+            for (const [webId, engineId] of this.webSessions) {
+                if (engineId === leavingId)
+                    continue;
+                const p = this.playerManager.getPlayerBySessionId(engineId);
+                if (p && p.currentRoomId === fromRoomId) {
+                    this.emitToWeb(webId, { type: 'info', content: msg });
+                }
             }
         });
     }
@@ -112,6 +148,7 @@ let WebClientService = class WebClientService {
         }
         await this.eventSystem.emit(new event_1.GameEvent(types_1.NetworkEventTypes.SESSION_AUTHENTICATED, 'web', engineSessionId, { username, webClientId }));
         await this.eventSystem.emit(new event_1.GameEvent(event_1.EventTypes.PLAYER_JOINED, engineSessionId));
+        await this.eventSystem.emit(new event_1.GameEvent('world.room.entered', 'web', engineSessionId, { fromRoomId: null, toRoomId: startRoomId }));
         return {
             success: true,
             username,
@@ -192,7 +229,7 @@ let WebClientService = class WebClientService {
         const player = this.playerManager.getPlayerBySessionId(engineSessionId);
         const roomId = player?.currentRoomId || 'tavern';
         const room = this.worldManager.getRoom(roomId);
-        const description = this.worldManager.getRoomDescription(roomId);
+        const description = this.worldManager.getRoomDescription(roomId, engineSessionId);
         return {
             location: room?.name || roomId,
             description: this.stripAnsi(description),

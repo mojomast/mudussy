@@ -42,7 +42,7 @@ const event_1 = require("../../core/event");
 const types_1 = require("./types");
 const npc_manager_1 = require("./npc-manager");
 class WorldManager extends events_1.EventEmitter {
-    constructor(eventSystem, config, logger) {
+    constructor(eventSystem, config, logger, playerManager) {
         super();
         this.rooms = new Map();
         this.items = new Map();
@@ -53,7 +53,11 @@ class WorldManager extends events_1.EventEmitter {
         this.logger = logger || console;
         this.worldData = this.createEmptyWorld();
         this.npcManager = new npc_manager_1.NPCManager(eventSystem, logger);
+        this.playerManager = playerManager;
         this.setupEventHandlers();
+    }
+    setPlayerManager(playerManager) {
+        this.playerManager = playerManager;
     }
     createEmptyWorld() {
         return {
@@ -347,7 +351,7 @@ class WorldManager extends events_1.EventEmitter {
         return room.exits.find(exit => exit.direction === normalized ||
             exit.verbs.includes(normalized)) || null;
     }
-    getRoomDescription(roomId) {
+    getRoomDescription(roomId, viewerSessionId) {
         const room = this.getRoom(roomId);
         if (!room)
             return 'Room not found.';
@@ -374,10 +378,12 @@ class WorldManager extends events_1.EventEmitter {
             });
         }
         const players = this.getPlayersInRoom(roomId);
-        if (players.length > 1) {
+        const others = viewerSessionId ? players.filter(p => p !== viewerSessionId) : players;
+        if (others.length > 0) {
             description += '\nAlso here:\n';
-            players.forEach(playerId => {
-                description += `  Player ${playerId}\n`;
+            others.forEach(sessionId => {
+                const name = this.playerManager?.getPlayerBySessionId(sessionId)?.username || `Player ${sessionId}`;
+                description += `  ${name}\n`;
             });
         }
         return description;
@@ -482,7 +488,7 @@ class WorldManager extends events_1.EventEmitter {
         if (!event.data)
             return;
         const { fromRoomId, toRoomId } = event.data;
-        const playerId = event.source;
+        const playerId = event.target;
         const room = this.getRoom(toRoomId);
         if (room && !room.players.includes(playerId)) {
             room.players.push(playerId);
@@ -493,7 +499,7 @@ class WorldManager extends events_1.EventEmitter {
         if (!event.data)
             return;
         const { fromRoomId, toRoomId } = event.data;
-        const playerId = event.source;
+        const playerId = event.target;
         const room = this.getRoom(fromRoomId);
         if (room) {
             room.players = room.players.filter(id => id !== playerId);

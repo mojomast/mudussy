@@ -228,7 +228,8 @@ export class EngineService {
     this.worldManager = new WorldManager(
       this.eventSystem,
       worldConfig,
-      this.logger
+      this.logger,
+      this.playerManager
     );
 
     // Load world content
@@ -269,6 +270,11 @@ export class EngineService {
       this.eventSystem,
       console
     );
+
+    // If world is already initialized, provide player manager for username lookups
+    if (this.worldManager) {
+      this.worldManager.setPlayerManager(this.playerManager);
+    }
 
     console.log('✅ Persistence initialized');
   }
@@ -316,13 +322,27 @@ export class EngineService {
 
     this.eventSystem.on(EventTypes.PLAYER_LEFT, (event) => {
       this.logger.info(`👋 Player left: ${event.source}`);
+      // Notify players in the room that this player left
+      if (this.playerManager && this.worldManager) {
+        const leaving = this.playerManager.getPlayerBySessionId(event.source);
+        if (leaving) {
+          const roomPlayers = this.worldManager.getPlayersInRoom(leaving.currentRoomId).filter(id => id !== leaving.sessionId);
+          if (roomPlayers.length) {
+            const msg = `${Ansi.brightGreen(leaving.username)} has left the room.`;
+            for (const id of roomPlayers) this.sendMessageToSession(id, msg, 'info');
+          }
+          // Ensure world state is updated
+          this.eventSystem.emit(new GameEvent('world.room.left', 'engine', leaving.sessionId, { fromRoomId: leaving.currentRoomId, toRoomId: null }));
+        }
+      }
     });
 
     // Room-based communication events
     this.eventSystem.on(EventTypes.PLAYER_MESSAGE, this.handlePlayerMessage.bind(this));
 
-    // Room movement events
-    this.eventSystem.on('world.room.entered', this.handleRoomEntered.bind(this));
+  // Room movement events
+  this.eventSystem.on('world.room.entered', this.handleRoomEntered.bind(this));
+  this.eventSystem.on('world.room.left', this.handleRoomLeft.bind(this));
     this.eventSystem.on('player.move', this.handlePlayerMove.bind(this));
 
     // Game events
@@ -535,6 +555,7 @@ export class EngineService {
       // Global chat - send to all connected players except sender
       const formattedMessage = `${Ansi.brightMagenta('[GLOBAL]')} ${Ansi.brightCyan(senderPlayer.username)} says: ${message}`;
       this.telnetServer.broadcastMessage({ content: formattedMessage, type: 'broadcast', timestamp: new Date() }, sessionId);
+      // Echo to sender handled by command parser; no extra send here
     } else {
       // Local chat - send to players in the same room
       // Get the player's current room
@@ -546,7 +567,6 @@ export class EngineService {
 
       if (recipients.length > 0) {
         const formattedMessage = `${Ansi.brightCyan(senderPlayer.username)} says: ${message}`;
-
         // Send to all players in the room except sender
         for (const recipientId of recipients) {
           this.sendMessageToSession(recipientId, formattedMessage, 'info');
@@ -562,7 +582,8 @@ export class EngineService {
     if (!event.data) return;
 
     const { fromRoomId, toRoomId } = event.data;
-    const playerId = event.source;
+  // For world movement events, the moving player's ID is on target
+  const playerId = (event.target as string) || event.source;
 
     if (!playerId || !toRoomId) return;
 
@@ -592,6 +613,29 @@ export class EngineService {
       }
 
       console.log(`${enteringPlayer.username} entered room ${toRoomId}, notified ${recipients.length} other players`);
+    }
+  }
+
+  /**
+   * Handle room left events for player movement notifications
+   */
+  private async handleRoomLeft(event: GameEvent): Promise<void> {
+    if (!event.data) return;
+
+    const { fromRoomId } = event.data;
+    const playerId = (event.target as string) || event.source;
+
+    if (!playerId || !fromRoomId) return;
+
+    if (!this.playerManager || !this.worldManager) return;
+
+    const leaving = this.playerManager.getPlayerBySessionId(playerId);
+    if (!leaving) return;
+
+    const playersInRoom = this.worldManager.getPlayersInRoom(fromRoomId).filter(id => id !== playerId);
+    if (playersInRoom.length) {
+      const msg = `${Ansi.brightGreen(leaving.username)} has left the room.`;
+      for (const id of playersInRoom) this.sendMessageToSession(id, msg, 'info');
     }
   }
 
@@ -640,7 +684,7 @@ export class EngineService {
     this.sendMessageToSession(playerId, ColorScheme.success(`You move ${direction}.`), 'info');
 
     // Send room description to the moving player
-    const roomDescription = this.worldManager.getRoomDescription(exit.toRoomId);
+  const roomDescription = this.worldManager.getRoomDescription(exit.toRoomId, playerId);
     this.sendMessageToSession(playerId, roomDescription, 'info');
 
     console.log(`${player.username} moved ${direction} from ${fromRoomId} to ${exit.toRoomId}`);

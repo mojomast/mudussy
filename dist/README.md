@@ -114,6 +114,19 @@ npm run server:stop
 npm run start:dev
 ```
 
+### Using the Web Client (SPA)
+
+Once the server is running, the playable single‑page app is served from the root path:
+
+- Web client: http://localhost:3000/
+- REST API: http://localhost:3000/api
+
+Authentication is a simple username prompt. After connecting, use commands like `look`, `go north` (or `n`), `say hello`, `who`, and `quit`.
+
+Notes:
+- Web client strips ANSI color codes automatically for clean rendering.
+- Telnet output retains ANSI for a classic experience.
+
 ### Environment Configuration
 
 Create a `.env` file based on `.env.example`:
@@ -128,6 +141,8 @@ Key configuration options:
 - `MUD_ENABLE_NETWORKING`: Enable/disable telnet server (default: true)
 - `MUD_ENABLE_WORLD`: Enable/disable world system (default: true)
 - `MUD_LOG_LEVEL`: Logging level (default: info)
+- `MUD_WORLD_PATH`: Path to world content (default: ./engine/modules/world/content)
+- `MUD_DEFAULT_ROOM_ID`: Preferred starting room ID. Must exist in content (e.g., `eldoria:tavern`). If invalid or missing, the first loaded room is used.
 
 ### Development Commands
 
@@ -172,6 +187,10 @@ npm run clean
 - **Player Sessions**: Persistent connections with state management
 - **Chat System**: Public and private messaging
 - **Presence**: Online status and player tracking
+
+### Web vs. Telnet Output
+- **Web**: ANSI codes are stripped before display; ideal for browsers.
+- **Telnet**: Full ANSI color and formatting for terminal clients.
 
 ### Plugin System
 - **Hot Reload**: Load/unload plugins without restarting
@@ -389,6 +408,28 @@ npm run server:dev
 - [Dialogue System Guide](docs/dialogue-system.md)
 - [API Reference](docs/api.md)
 - [Deployment Guide](docs/deployment.md)
+
+## 🧭 Gameplay Basics
+
+- `look` / `l` — Show the current room’s full description, exits, and occupants (uses real world data).
+- Movement — `north|south|east|west|up|down` and aliases like `n`, `s`, `e`, `u`, etc. You can also use `go <direction>`.
+- `say <message>` — Local room chat.
+- `chat <message>` — Global chat to all players.
+- `who` — List online players.
+- `clear` — Clears the screen (telnet ANSI).
+- `quit` — Disconnect.
+
+Starting Room Behavior:
+- Server prefers `MUD_DEFAULT_ROOM_ID` if it matches a loaded room.
+- Otherwise it falls back to the first room in the loaded content.
+
+## 🔧 World Loading Notes
+
+The engine loads `world.json` from `MUD_WORLD_PATH`, then merges any listed `sectors/*.json` into the world. Arrays are normalized to ensure rooms/items/NPCs are present. After loading, fast lookup maps are built for efficient access.
+
+Troubleshooting:
+- If you see “Room not found” or spawn at the wrong location, ensure `MUD_DEFAULT_ROOM_ID` points to a real room ID in your content (e.g., `eldoria:town_square`).
+- If you see ANSI escape sequences in the browser, ensure you’re using the built‑in web client (it strips ANSI automatically). If embedding elsewhere, strip ANSI on display.
 
 ## 🤖 NPC System
 

@@ -20,6 +20,7 @@ import {
   DirectionAliases
 } from './types';
 import { NPCManager } from './npc-manager';
+import { PlayerManager } from '../persistence/player-manager';
 
 export class WorldManager extends EventEmitter {
   private eventSystem: EventSystem;
@@ -27,6 +28,7 @@ export class WorldManager extends EventEmitter {
   private worldData: IWorldData;
   private logger: any;
   private npcManager: NPCManager;
+  private playerManager?: PlayerManager;
 
   // Fast lookup maps
   private rooms: Map<string, IRoom> = new Map();
@@ -34,16 +36,24 @@ export class WorldManager extends EventEmitter {
   private npcs: Map<string, INPC> = new Map();
   private areas: Map<string, IArea> = new Map();
 
-  constructor(eventSystem: EventSystem, config: IWorldConfig, logger?: any) {
+  constructor(eventSystem: EventSystem, config: IWorldConfig, logger?: any, playerManager?: PlayerManager) {
     super();
     this.eventSystem = eventSystem;
     this.config = config;
     this.logger = logger || console;
     this.worldData = this.createEmptyWorld();
     this.npcManager = new NPCManager(eventSystem, logger);
+    this.playerManager = playerManager;
 
     // Set up event handlers
     this.setupEventHandlers();
+  }
+
+  /**
+   * Provide or update the PlayerManager reference (used for mapping session IDs to usernames)
+   */
+  setPlayerManager(playerManager: PlayerManager): void {
+    this.playerManager = playerManager;
   }
 
   /**
@@ -504,7 +514,7 @@ export class WorldManager extends EventEmitter {
   /**
    * Get room description with exits
    */
-  getRoomDescription(roomId: string): string {
+  getRoomDescription(roomId: string, viewerSessionId?: string): string {
     const room = this.getRoom(roomId);
     if (!room) return 'Room not found.';
 
@@ -538,11 +548,12 @@ export class WorldManager extends EventEmitter {
 
     // Add players (excluding the viewer)
     const players = this.getPlayersInRoom(roomId);
-    if (players.length > 1) { // More than just the viewer
+    const others = viewerSessionId ? players.filter(p => p !== viewerSessionId) : players;
+    if (others.length > 0) {
       description += '\nAlso here:\n';
-      players.forEach(playerId => {
-        // TODO: Get player name from session
-        description += `  Player ${playerId}\n`;
+      others.forEach(sessionId => {
+        const name = this.playerManager?.getPlayerBySessionId(sessionId)?.username || `Player ${sessionId}`;
+        description += `  ${name}\n`;
       });
     }
 
@@ -682,7 +693,8 @@ export class WorldManager extends EventEmitter {
     if (!event.data) return;
 
     const { fromRoomId, toRoomId } = event.data;
-    const playerId = event.source;
+  // Player identifier is carried in the event target for world room events
+  const playerId = event.target as string;
 
     // Add player to the new room
     const room = this.getRoom(toRoomId);
@@ -699,7 +711,8 @@ export class WorldManager extends EventEmitter {
     if (!event.data) return;
 
     const { fromRoomId, toRoomId } = event.data;
-    const playerId = event.source;
+  // Player identifier is carried in the event target for world room events
+  const playerId = event.target as string;
 
     // Remove player from the old room
     const room = this.getRoom(fromRoomId);

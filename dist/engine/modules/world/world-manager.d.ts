@@ -2,17 +2,20 @@ import { EventEmitter } from 'events';
 import { EventSystem } from '../../core/event';
 import { IRoom, IExit, IItem, INPC, IWorldConfig } from './types';
 import { NPCManager } from './npc-manager';
+import { PlayerManager } from '../persistence/player-manager';
 export declare class WorldManager extends EventEmitter {
     private eventSystem;
     private config;
     private worldData;
     private logger;
     private npcManager;
+    private playerManager?;
     private rooms;
     private items;
     private npcs;
     private areas;
-    constructor(eventSystem: EventSystem, config: IWorldConfig, logger?: any);
+    constructor(eventSystem: EventSystem, config: IWorldConfig, logger?: any, playerManager?: PlayerManager);
+    setPlayerManager(playerManager: PlayerManager): void;
     private createEmptyWorld;
     private mergeSectorData;
     loadWorld(worldPath?: string): Promise<void>;
@@ -33,7 +36,7 @@ export declare class WorldManager extends EventEmitter {
     createRoom(name: string, description: string, areaId?: string): IRoom;
     createExit(fromRoomId: string, toRoomId: string, direction: string, description?: string): IExit | null;
     findExit(roomId: string, directionOrVerb: string): IExit | null;
-    getRoomDescription(roomId: string): string;
+    getRoomDescription(roomId: string, viewerSessionId?: string): string;
     validateWorld(): {
         valid: boolean;
         errors: string[];

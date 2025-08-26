@@ -153,22 +153,6 @@ class TelnetServer extends events_1.EventEmitter {
                 this.sendPrompt(sessionId);
             }
         });
-        this.eventSystem.on(event_2.EventTypes.PLAYER_MESSAGE, (event) => {
-            if (!event.data)
-                return;
-            const { message, type } = event.data;
-            const senderId = event.source;
-            const senderSession = this.sessionManager.getSession(senderId);
-            const username = senderSession?.username || 'Unknown';
-            let formattedMessage;
-            if (type === 'say') {
-                formattedMessage = ansi_1.ColorScheme.user(`${username}`, message);
-            }
-            else {
-                formattedMessage = `${username}: ${message}`;
-            }
-            this.sessionManager.broadcastMessage(formattedMessage, 'user', senderId);
-        });
         this.eventSystem.on(event_2.EventTypes.PLAYER_JOINED, (event) => {
             const sessionId = event.source;
             const session = this.sessionManager.getSession(sessionId);

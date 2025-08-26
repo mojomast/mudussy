@@ -227,7 +227,7 @@ class CommandParser {
                 if (!player) {
                     return ansi_1.ColorScheme.error('You are not present in the world.');
                 }
-                const desc = this.worldManager.getRoomDescription(player.currentRoomId);
+                const desc = this.worldManager.getRoomDescription(player.currentRoomId, sessionId);
                 return desc;
             }
         });

@@ -71,6 +71,7 @@ export declare class EngineService {
     updateConfig(newConfig: Partial<IEngineConfig>): void;
     private handlePlayerMessage;
     private handleRoomEntered;
+    private handleRoomLeft;
     private handlePlayerMove;
     getStatus(): object;
     createEntity(entityClass: new (...args: any[]) => BaseEntity, ...args: any[]): BaseEntity;
