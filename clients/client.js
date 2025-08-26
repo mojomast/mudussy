@@ -18,6 +18,7 @@ class MUDWebClient {
         this.outputElement = document.getElementById('output');
         this.commandInput = document.getElementById('commandInput');
         this.sendButton = document.getElementById('sendButton');
+    this.dialogueIndicator = document.getElementById('dialogueIndicator');
     }
 
     initEventListeners() {
@@ -55,7 +56,16 @@ class MUDWebClient {
 
             this.socket.on('message', (payload) => {
                 // Generic message from gateway
-                if (payload?.content) this.addMessage(payload.content, 'system');
+                if (payload?.content) {
+                    this.addMessage(payload.content, 'system');
+                    // Toggle dialogue indicator based on hints
+                    const text = String(payload.content).toLowerCase();
+                    if (text.includes('[dialogue mode enabled]')) {
+                        this.setDialogueIndicator(true);
+                    } else if (text.includes('[dialogue mode disabled]') || text.includes('[this conversation has ended]')) {
+                        this.setDialogueIndicator(false);
+                    }
+                }
             });
 
             this.socket.on('auth_required', (payload) => {
@@ -79,7 +89,13 @@ class MUDWebClient {
             });
 
             this.socket.on('command_response', (resp) => {
-                if (resp?.response) this.addMessage(String(resp.response), 'system');
+                if (resp?.response) {
+                    const msg = String(resp.response);
+                    this.addMessage(msg, 'system');
+                    if (msg.toLowerCase().includes('[this conversation has ended]')) {
+                        this.setDialogueIndicator(false);
+                    }
+                }
             });
 
             this.socket.on('command_error', (err) => {
@@ -90,6 +106,12 @@ class MUDWebClient {
             this.addMessage('Failed to connect to server', 'error');
             console.error('Connection error:', error);
         }
+    }
+
+    setDialogueIndicator(on) {
+        if (!this.dialogueIndicator) return;
+        if (on) this.dialogueIndicator.classList.add('show');
+        else this.dialogueIndicator.classList.remove('show');
     }
 
     authenticate() {

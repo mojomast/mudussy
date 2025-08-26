@@ -19,6 +19,7 @@ Starting room resolution:
 - Movement — `north|south|east|west|up|down` and aliases like `n`, `s`, `e`, `u` or `go <direction>`.
 - `say <message>` — Local room chat.
 - `chat <message>` — Global chat.
+- `talk <npc>` — Start a conversation with an NPC. While in dialogue, just type the choice number or text; use `leave` to exit.
 - `who` — Online players.
 - `clear` — Clear screen (telnet ANSI).
 - `quit` — Disconnect.
@@ -32,3 +33,9 @@ Starting room resolution:
 
 - If you see raw ANSI in the browser, ensure you’re using the built-in web client or strip ANSI where you render text.
 - If you spawn in an unexpected room, check `MUD_DEFAULT_ROOM_ID` and verify that room exists in your world content.
+- If dialogue seems unresponsive, ensure you’re in dialogue mode (you’ll see choices printed) and type a number/text; use `leave` to exit and re‑`talk` the NPC.
+
+## Presence and Room Visibility
+
+- Room descriptions show other players by username and exclude yourself.
+- You’ll see notifications when players enter or leave your current room.

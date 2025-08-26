@@ -10,6 +10,7 @@ export declare class PlayerManager extends EventEmitter {
     addPlayer(sessionId: string, player: Player): void;
     getPlayerBySessionId(sessionId: string): Player | undefined;
     getPlayerByUsername(username: string): Player | undefined;
+    getPlayerById(playerId: string): Player | undefined;
     removePlayerBySessionId(sessionId: string): boolean;
     getAllActivePlayers(): Player[];
     getAllActiveSessionIds(): string[];

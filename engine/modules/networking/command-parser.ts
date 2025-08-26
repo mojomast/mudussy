@@ -31,6 +31,8 @@ export class CommandParser {
   private movementCommandNames: Set<string> = new Set();
   // Track hidden/utility commands we don't want in generic listings
   private hiddenCommandNames: Set<string> = new Set();
+  // Track sessions that are currently in dialogue sub-prompt mode
+  private dialogueModeSessions: Set<string> = new Set();
 
   constructor(eventSystem: EventSystem, sessionManager?: SessionManager, playerManager?: PlayerManager, logger?: any, worldManager?: WorldManager) {
     this.eventSystem = eventSystem;
@@ -85,6 +87,25 @@ export class CommandParser {
       const command = this.parseInput(input);
       if (!command) return;
 
+      // In dialogue mode: intercept generic input
+      if (this.isInDialogueMode(sessionId)) {
+        const rawLower = command.raw.toLowerCase();
+        // Map common exit keywords to a conversation end handler
+        if (rawLower === 'exit' || rawLower === 'end' || rawLower === 'leave' || rawLower === 'cancel') {
+          const endHandler = this.handlers.get('leave');
+          if (endHandler) {
+            this.logger.log(`Dialogue mode: ending conversation for session ${sessionId}`);
+            return await endHandler.handler(sessionId, [], command.raw);
+          }
+        }
+        // Otherwise treat entire input as a dialogue response
+        const respondHandler = this.handlers.get('respond');
+        if (respondHandler) {
+          this.logger.log(`Dialogue mode: routing input as response for session ${sessionId}`);
+          return await respondHandler.handler(sessionId, [command.raw], command.raw);
+        }
+      }
+
       // Emit command event
       this.eventSystem.emit(new GameEvent(
         NetworkEventTypes.COMMAND_RECEIVED,
@@ -120,6 +141,34 @@ export class CommandParser {
       this.logger.error(`Error parsing command '${input}' for session ${sessionId}:`, error);
       return ColorScheme.error('An error occurred while processing your command.');
     }
+  }
+
+  /**
+   * Enter dialogue sub-prompt mode for a session
+   */
+  enterDialogueMode(sessionId: string): void {
+    this.dialogueModeSessions.add(sessionId);
+  }
+
+  /**
+   * Exit dialogue sub-prompt mode for a session
+   */
+  exitDialogueMode(sessionId: string): void {
+    this.dialogueModeSessions.delete(sessionId);
+  }
+
+  /**
+   * Check if a session is in dialogue mode
+   */
+  isInDialogueMode(sessionId: string): boolean {
+    return this.dialogueModeSessions.has(sessionId);
+  }
+
+  /**
+   * Get the appropriate prompt text for a session
+   */
+  getPromptFor(sessionId: string): string {
+    return this.isInDialogueMode(sessionId) ? 'Dialogue> ' : '> ';
   }
 
   /**

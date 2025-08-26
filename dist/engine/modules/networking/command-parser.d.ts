@@ -20,10 +20,15 @@ export declare class CommandParser {
     private worldManager?;
     private movementCommandNames;
     private hiddenCommandNames;
+    private dialogueModeSessions;
     constructor(eventSystem: EventSystem, sessionManager?: SessionManager, playerManager?: PlayerManager, logger?: any, worldManager?: WorldManager);
     registerCommand(handler: ICommandHandler): void;
     unregisterCommand(command: string): boolean;
     parseCommand(sessionId: string, input: string): Promise<string | void>;
+    enterDialogueMode(sessionId: string): void;
+    exitDialogueMode(sessionId: string): void;
+    isInDialogueMode(sessionId: string): boolean;
+    getPromptFor(sessionId: string): string;
     private parseInput;
     private parseArguments;
     getRegisteredCommands(): string[];

@@ -85,11 +85,15 @@ export class DialogueCommandHandlers {
     }
 
     try {
-      // Start conversation
-      const response = await this.dialogueManager.startConversation(player, npc.id, npc.dialogueProvider);
+  // Start conversation
+  const response = await this.dialogueManager.startConversation(player, npc.id, npc.dialogueProvider);
 
-      // Format and return response
-      return this.formatDialogueResponse(response);
+  // Enter dialogue sub-prompt mode
+  const cp = this.engine?.getTelnetServer()?.getCommandParser();
+  cp?.enterDialogueMode(sessionId);
+
+  // Format and return response with indicator
+  return ColorScheme.system('[Dialogue mode enabled]') + '\n' + this.formatDialogueResponse(response, true);
     } catch (error) {
       return ColorScheme.error(`Failed to start conversation: ${error.message}`);
     }
@@ -130,11 +134,13 @@ export class DialogueCommandHandlers {
     }
 
     try {
-      // Start conversation
-      const response = await this.dialogueManager.startConversation(player, npc.id, npc.dialogueProvider);
+  // Start conversation
+  const response = await this.dialogueManager.startConversation(player, npc.id, npc.dialogueProvider);
 
-      // Format and return response
-      return this.formatDialogueResponse(response);
+  // Enter dialogue sub-prompt mode
+  const cp = this.engine?.getTelnetServer()?.getCommandParser();
+  cp?.enterDialogueMode(sessionId);
+  return ColorScheme.system('[Dialogue mode enabled]') + '\n' + this.formatDialogueResponse(response, true);
     } catch (error) {
       return ColorScheme.error(`Failed to start conversation: ${error.message}`);
     }
@@ -172,6 +178,13 @@ export class DialogueCommandHandlers {
         playerInput,
         conversation.conversationId
       );
+
+      // Auto-exit dialogue mode if conversation completes
+      if (response.isComplete) {
+        const cp = this.engine?.getTelnetServer()?.getCommandParser();
+        cp?.exitDialogueMode(sessionId);
+        return this.formatDialogueResponse(response) + '\n' + ColorScheme.system('[Dialogue mode disabled]');
+      }
 
       // Format and return response
       return this.formatDialogueResponse(response);
@@ -216,8 +229,26 @@ export class DialogueCommandHandlers {
    * End dialogue command
    */
   async endDialogue(sessionId: string, args: string[], raw: string): Promise<string | void> {
-    // TODO: Get player's current conversation and end it
-    return ColorScheme.info('No active dialogue to end.');
+    const player = this.getPlayer(sessionId);
+    if (!player) {
+      return ColorScheme.error('Player not found.');
+    }
+    const conversations = this.dialogueManager.getPlayerConversations(player.id);
+    if (conversations.length === 0) {
+      // Ensure mode is cleared anyway
+      const cpClear = this.engine?.getTelnetServer()?.getCommandParser();
+      cpClear?.exitDialogueMode(sessionId);
+      return ColorScheme.info('No active dialogue to end.');
+    }
+    const conversation = conversations[0];
+    try {
+  await this.dialogueManager.endConversation(player, conversation.npcId, conversation.conversationId);
+      const cp = this.engine?.getTelnetServer()?.getCommandParser();
+      cp?.exitDialogueMode(sessionId);
+  return ColorScheme.info('You end the conversation.') + '\n' + ColorScheme.system('[Dialogue mode disabled]');
+    } catch (error) {
+      return ColorScheme.error(`Failed to end conversation: ${error.message}`);
+    }
   }
 
   /**
@@ -231,7 +262,7 @@ export class DialogueCommandHandlers {
   /**
    * Format dialogue response for display
    */
-  private formatDialogueResponse(response: IDialogueResponse): string {
+  private formatDialogueResponse(response: IDialogueResponse, enteredMode: boolean = false): string {
     let output = '';
 
     // Add NPC message
@@ -245,7 +276,11 @@ export class DialogueCommandHandlers {
         output += `${ColorScheme.success(choiceNumber.toString())}. ${choice.text}\n`;
       });
       output += '\n';
-      output += ColorScheme.info('Type "respond <number>" or "respond <text>" to choose.\n');
+      if (enteredMode) {
+        output += ColorScheme.info('Dialogue mode active. Type a number or text to respond, or "leave" to exit.\n');
+      } else {
+        output += ColorScheme.info('Type "respond <number>" or "respond <text>" to choose.\n');
+      }
     }
 
     // Add conversation ID for debugging
@@ -293,6 +328,14 @@ export class DialogueCommandHandlers {
         description: 'General dialogue commands',
         usage: 'dialogue <start|end|continue|status> [target]',
         handler: this.dialogue.bind(this)
+      },
+
+      leave: {
+        command: 'leave',
+        aliases: ['end', 'bye'],
+        description: 'Leave the current conversation',
+        usage: 'leave',
+        handler: this.endDialogue.bind(this)
       }
     };
   }

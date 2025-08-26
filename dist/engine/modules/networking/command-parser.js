@@ -10,6 +10,7 @@ class CommandParser {
         this.handlers = new Map();
         this.movementCommandNames = new Set();
         this.hiddenCommandNames = new Set();
+        this.dialogueModeSessions = new Set();
         this.eventSystem = eventSystem;
         this.sessionManager = sessionManager;
         this.playerManager = playerManager;
@@ -44,6 +45,21 @@ class CommandParser {
             const command = this.parseInput(input);
             if (!command)
                 return;
+            if (this.isInDialogueMode(sessionId)) {
+                const rawLower = command.raw.toLowerCase();
+                if (rawLower === 'exit' || rawLower === 'end' || rawLower === 'leave' || rawLower === 'cancel') {
+                    const endHandler = this.handlers.get('leave');
+                    if (endHandler) {
+                        this.logger.log(`Dialogue mode: ending conversation for session ${sessionId}`);
+                        return await endHandler.handler(sessionId, [], command.raw);
+                    }
+                }
+                const respondHandler = this.handlers.get('respond');
+                if (respondHandler) {
+                    this.logger.log(`Dialogue mode: routing input as response for session ${sessionId}`);
+                    return await respondHandler.handler(sessionId, [command.raw], command.raw);
+                }
+            }
             this.eventSystem.emit(new event_1.GameEvent(types_1.NetworkEventTypes.COMMAND_RECEIVED, sessionId, undefined, {
                 sessionId,
                 command: command.command,
@@ -62,6 +78,18 @@ class CommandParser {
             this.logger.error(`Error parsing command '${input}' for session ${sessionId}:`, error);
             return ansi_1.ColorScheme.error('An error occurred while processing your command.');
         }
+    }
+    enterDialogueMode(sessionId) {
+        this.dialogueModeSessions.add(sessionId);
+    }
+    exitDialogueMode(sessionId) {
+        this.dialogueModeSessions.delete(sessionId);
+    }
+    isInDialogueMode(sessionId) {
+        return this.dialogueModeSessions.has(sessionId);
+    }
+    getPromptFor(sessionId) {
+        return this.isInDialogueMode(sessionId) ? 'Dialogue> ' : '> ';
     }
     parseInput(input) {
         const trimmed = input.trim();

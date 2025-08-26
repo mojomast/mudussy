@@ -10,6 +10,7 @@ A comprehensive NPC dialogue system for the MUD engine with support for branchin
 - **Condition System**: Branch dialogue based on player state, time, random chance, etc.
 - **State Persistence**: Conversations persist across sessions with automatic cleanup
 - **Command Integration**: Talk, converse, and respond commands for natural interaction
+- **Dialogue Sub‑Prompt**: `talk <npc>` enters a dialogue mode (prompt becomes `Dialogue>`); type a number/text to respond; `leave` exits
 - **NPC Integration**: Connect dialogue providers to NPCs with switching capability
 
 ## Architecture
@@ -27,7 +28,7 @@ A comprehensive NPC dialogue system for the MUD engine with support for branchin
 1. Player initiates dialogue with `talk <npc>` command
 2. DialogueManager routes to appropriate provider
 3. Provider processes conversation state and returns response
-4. Player responds with `respond <choice>` command
+4. Player responds by typing a number or text directly while in dialogue mode (or `respond <choice>` outside of it)
 5. Process continues until conversation ends
 
 ## Dialogue Tree Format
@@ -223,9 +224,11 @@ const commandHandlers = dialogueCommands.getCommandHandlers();
 commandParser.registerCommand(commandHandlers.talk);
 commandParser.registerCommand(commandHandlers.converse);
 commandParser.registerCommand(commandHandlers.respond);
+commandParser.registerCommand(commandHandlers.leave);
 ```
 
 ### Starting Conversations
+When a player starts a conversation via `talk <npc>`, the engine enters a dialogue sub‑prompt for that session. The telnet prompt changes to `Dialogue>`, and the web client routes plain inputs as dialogue responses. Players can type `leave` to end the conversation and return to the main prompt.
 
 ```typescript
 // Start dialogue

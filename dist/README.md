@@ -123,6 +123,8 @@ Once the server is running, the playable single‑page app is served from the ro
 
 Authentication is a simple username prompt. After connecting, use commands like `look`, `go north` (or `n`), `say hello`, `who`, and `quit`.
 
+NPC dialogue: use `talk <npc name>` to start a conversation. While in dialogue, your prompt changes to `Dialogue>`. Type a number or text to choose; type `leave` to exit the conversation.
+
 Notes:
 - Web client strips ANSI color codes automatically for clean rendering.
 - Telnet output retains ANSI for a classic experience.
@@ -185,12 +187,15 @@ npm run clean
 ### Multiplayer
 - **Real-time Communication**: Instant updates for all players
 - **Player Sessions**: Persistent connections with state management
-- **Chat System**: Public and private messaging
+- **Chat System**: Public and private messaging; `say` is room‑local, `chat` is global
 - **Presence**: Online status and player tracking
+  - Co‑occupants are notified when players enter/leave a room
 
 ### Web vs. Telnet Output
 - **Web**: ANSI codes are stripped before display; ideal for browsers.
 - **Telnet**: Full ANSI color and formatting for terminal clients.
+
+Room descriptions now list co‑located players by username and hide yourself from the "Also here:" list. When players enter/leave your room, you receive notifications.
 
 ### Plugin System
 - **Hot Reload**: Load/unload plugins without restarting
